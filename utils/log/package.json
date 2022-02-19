@@ -1,0 +1,25 @@
+{
+  "name": "@fftai/dai-cli-log",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "daiyan.Shen <daishan526@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "npmlog": "^6.0.1"
+  }
+}
