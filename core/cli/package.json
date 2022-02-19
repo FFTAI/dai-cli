@@ -1,0 +1,34 @@
+{
+  "name": "@fftai/dai-cli",
+  "version": "0.0.0",
+  "description": "dai-cli 核心库",
+  "author": "daiyan.Shen <daishan526@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "bin": {
+    "dai": "bin/index.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@fftai/dai-cli-log": "file:../../utils/log",
+    "colors": "^1.4.0",
+    "commander": "^9.0.0",
+    "dotenv": "^16.0.0",
+    "import-local": "^3.1.0",
+    "minimist": "^1.2.5",
+    "path-exists": "^4.0.0",
+    "root-check": "^1.0.0",
+    "semver": "^7.3.5",
+    "user-home": "^3.0.0"
+  }
+}
