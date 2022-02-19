@@ -19,6 +19,9 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@fftai/dai-cli-log": "file:../../utils/log",
     "colors": "^1.4.0",
