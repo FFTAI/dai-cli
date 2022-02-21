@@ -29,6 +29,8 @@ async function core() {
 }
 
 async function prepare() {
+    // 检查当前版本是否为最新
+    checkGlobalUpdate()
     // 输出版本号
     checkPkgVersion()
     // 检查node版本
@@ -41,8 +43,6 @@ async function prepare() {
     checkInputArgs()
     // 检查环境变量
     checkENV()
-    // 检查当前版本是否为最新
-    await checkGlobalUpdate()
 }
 
 function checkPkgVersion() {
@@ -110,14 +110,16 @@ async function checkGlobalUpdate() {
   const currentVersion = pkg.version
   const pkgName = pkg.name
 
-  // const {
-  //   getNpmSemverVersion
-  // } = require('@daiyan-cli/get-npm-info')
-  // const lastVersion = await getNpmSemverVersion(currentVersion, pkgName)
-  // if (lastVersion && semver.gt(lastVersion, currentVersion)) {
-  //   log.warn(colors.yellow(`请手动更新 ${pkgName}，当前版本：${currentVersion}，最新版本：${lastVersion}`))
-  //   log.info(`更新命令：npm install -g ${pkgName}`)
-  // }
+  const {
+    getNpmSemverVersion
+  } = require('@fftai/dai-cli-get-npm-info')
+  const lastVersion = await getNpmSemverVersion(currentVersion, pkgName)
+  if (lastVersion && semver.gt(lastVersion, currentVersion)) {
+    log.notice(colors.yellow(`${pkgName} 最新版本已就绪`))
+    log.notice(colors.yellow(`当前版本：${currentVersion}`))
+    log.notice(colors.yellow(`最新版本：${lastVersion}`))
+    log.notice(`更新命令：npm install -g ${pkgName}`)
+  }
 }
 
 function registerCommand() {

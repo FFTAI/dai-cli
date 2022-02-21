@@ -1,0 +1,31 @@
+{
+  "name": "@fftai/dai-cli-get-npm-info",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "daiyan.Shen <daishan526@gmail.com>",
+  "homepage": "https://github.com/Sdaiyan/dai-cli#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sdaiyan/dai-cli.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/Sdaiyan/dai-cli/issues"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "semver": "^7.3.5",
+    "url-join": "^4.0.1"
+  }
+}
