@@ -12,7 +12,7 @@ const constant = require('./const')
 const pkg = require('../package.json')
 
 const program = new commander.Command()
-
+const start = require('@fftai/dai-cli-command-start')
 let args, config;
 
 async function core() {
@@ -130,6 +130,11 @@ function registerCommand() {
     .option('-d, --debug', '是否开启调试模式', false)
     .option('-e, --env <env>', '获取环境变量')
     // .action(exec)
+
+  program
+    .command('start [name]')
+    .description('开始一个任务或者修复一个bug')
+    .action(start)
   
   // 监听debug
   program.on('option:debug', function () {

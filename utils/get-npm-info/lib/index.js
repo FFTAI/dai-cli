@@ -8,13 +8,15 @@ function getNpmInfo(npmName, registry) {
   if (!npmName) return null;
   const registryUrl = registry || getDefaultRegisty()
   const npmInfoUrl = urlJoin(registryUrl, npmName)
-  return axios.get(npmInfoUrl).then(res => {
+  return axios.get(npmInfoUrl, {
+    timeout: 3000
+  }).then(res => {
     if (res.status === 200) {
       return res.data
     }
     return null
   }).catch(err => {
-    return Promise.reject(err)
+    return null
   })
 }
 
