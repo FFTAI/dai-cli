@@ -13,6 +13,7 @@ const pkg = require('../package.json')
 
 const program = new commander.Command()
 const start = require('@fftai/dai-cli-command-start')
+const login = require('@fftai/dai-cli-command-login')
 let args, config;
 
 async function core() {
@@ -135,6 +136,11 @@ function registerCommand() {
     .command('start [name]')
     .description('开始一个任务或者修复一个bug')
     .action(start)
+
+  program
+    .command('login [system]')
+    .description('登录某个系统')
+    .action(login)
   
   // 监听debug
   program.on('option:debug', function () {
