@@ -24,6 +24,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "@fftai/dai-cli-log": "file:../../utils/log",
     "axios": "^0.26.0",
     "inquirer": "^8.2.0",
     "md5": "^2.3.0"

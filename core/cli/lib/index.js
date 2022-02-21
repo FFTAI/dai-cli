@@ -139,24 +139,9 @@ function registerCommand() {
 
   program
     .command('login [system]')
+    .option('-l, --link <link>', '服务器地址')
     .description('登录某个系统')
     .action(login)
-  
-  // 监听debug
-  program.on('option:debug', function () {
-    if (program.debug) {
-      process.env.LOG_LEVEL = 'verbose'
-    } else {
-      process.env.LOG_LEVEL = 'info'
-    }
-    log.level = process.env.LOG_LEVEL
-    log.verbose('debug mode enable')
-  })
-  
-  // 监听targetPath
-  program.on('option:targetPath', function () {
-    process.env.CLI_TARGET_PATH = program.targetPath
-  })
 
   // 对未知命令的监听
   program.on('command:*', function (arg) {

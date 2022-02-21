@@ -1,6 +1,7 @@
 'use strict';
 const inquirer = require('inquirer')
 const axios = require('axios')
+const log = require('@fftai/dai-cli-log')
 
 const systemList = [
   'zentao',
@@ -53,8 +54,10 @@ const passwordPrompt = {
   }
 }
 
-async function loginAction (inputSystem) {
-  const { data } = await axios.post('http://192.168.8.250:81/zentao/user-login.json', {
+async function loginAction (inputSystem, { link }) {
+  link = link || '192.168.8.250:81'
+  log.verbose('地址', link)
+  const { data } = await axios.post(`http://${link}/zentao/user-login.json`, {
     data: {
       account: 'sdy',
       password: '97e27f2cb32b89431c828f0d597e3876',
