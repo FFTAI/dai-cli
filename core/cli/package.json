@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "dai-cli 核心库",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -23,8 +23,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@fftai/dai-cli-command-start": "file:../../commands/start",
     "@fftai/dai-cli-command-login": "file:../../commands/login",
+    "@fftai/dai-cli-command-start": "file:../../commands/start",
     "@fftai/dai-cli-get-npm-info": "file:../../utils/get-npm-info",
     "@fftai/dai-cli-log": "file:../../utils/log",
     "colors": "^1.4.0",
