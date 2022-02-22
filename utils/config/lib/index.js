@@ -26,6 +26,7 @@ function setConfig (name, value) {
   if (!validateConfigName(name)) {
     return
   }
+  console.log(process.env[name])
   if (writeFile(process.env[name], value)) {
     log.success(`写入配置成功 ${name}=${value}`)
   } else {

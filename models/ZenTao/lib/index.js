@@ -7,8 +7,8 @@ class ZenTao {
   constructor () {
     this.requestUrl = getConfig(ZENTAO_REQUEST_URL)
     if (!this.requestUrl) {
-      log.info(`设置蝉道 requestUrl 命令：dai config -n ZENTAO_REQUEST_URL -v 当前蝉道地址`)
-      log.info(`例如：dai config -n ZENTAO_REQUEST_URL -v http://192.168.8.250:81/zentao/`)
+      log.info(`设置蝉道 requestUrl 命令：dai config set -n ZENTAO_REQUEST_URL -v 当前蝉道地址`)
+      log.info(`例如：dai config set -n ZENTAO_REQUEST_URL -v http://192.168.8.250:81/zentao/`)
       throw new Error('蝉道 requestUrl 未设置')
     }
     this.sid = getConfig(ZENTAO_SESSION_ID)
@@ -30,10 +30,14 @@ class ZenTao {
     log.verbose('loginRequestUrl', requestUrl)
     try {
       const res = await axios.post(requestUrl, loginForm, { headers: loginForm.getHeaders() })
-      const sid = this.getSid(res.headers['set-cookie'])
-      setConfig(ZENTAO_SESSION_ID, sid)
-      this.sid = sid
-      log.success(`蝉道登录成功！`)
+      if (res.data.status === 'success') {
+        const sid = this.getSid(res.headers['set-cookie'])
+        setConfig(ZENTAO_SESSION_ID, sid)
+        this.sid = sid
+        log.success(`蝉道登录成功！`)
+      } else {
+        log.error(res.data.reason)
+      }
     } catch (err) {
       throw new Error(err)
     }
