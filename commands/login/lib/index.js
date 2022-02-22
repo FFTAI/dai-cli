@@ -1,9 +1,6 @@
-'use strict';
 const inquirer = require('inquirer')
-const axios = require('axios')
 const log = require('@fftai/dai-cli-log')
-const FormData = require('form-data')
-const { setConfig, getConfig, ZENTAO_REQUEST_URL, ZENTAO_SESSION_ID } = require('@fftai/dai-cli-util-config')
+const ZenTao = require('@fftai/dai-cli-models-zentao')
 
 const systemList = [
   'zentao',
@@ -56,52 +53,14 @@ const passwordPrompt = {
   }
 }
 
-async function loginAction (inputSystem, { link }) {
-  const zentaoRequestUrl = link || getConfig(ZENTAO_REQUEST_URL)
+async function loginAction (inputSystem) {
   const { system, account, password } = await getBaseInfo(inputSystem)
   log.verbose(account)
   log.verbose(password)
   if (system === 'zentao') {
     log.verbose('login zentao')
-    const loginForm = getLoginForm(account, password)
-    const requestUrl = `${zentaoRequestUrl}user-login.json`
-    log.verbose('requestUrl', requestUrl)
-    try {
-      const res = await axios.post(requestUrl, loginForm, { headers: loginForm.getHeaders() })
-      const sid = getSid(res.headers['set-cookie'])
-      setConfig(ZENTAO_SESSION_ID, sid)
-      log.success(`蝉道登录成功！`)
-    } catch (err) {
-      throw new Error('登录失败', err)
-    }
-  }
-  // getMyTaskList(zentaoRequestUrl, getConfig(ZENTAO_SESSION_ID))
-  // const { system, username, password } = await getBaseInfo(inputSystem)
-  // console.log('system', system)
-  // console.log('username', username)
-  // console.log('password', password)
-}
-
-function getLoginForm (account, password) {
-  const form = new FormData()
-  form.append('account', account)
-  form.append('password', password)
-  return form
-}
-
-function getSid (cookies) {
-  const cookie = cookies.find(cookie => cookie.includes('zentaosid='))
-  if (cookie) {
-    return cookie.match(/(?<=zentaosid=)\w+/)[0]
-  }
-}
-
-async function getMyTaskList (link, sid) {
-  try {
-    const { data } = await axios.get(`${link}my-task.json?zentaosid=${sid}`)
-    console.log(JSON.parse(data.data).tasks)
-  } catch (err) {
-    console.log('data', data)
+    const zentao = new ZenTao()
+    zentao.login(account, password)
   }
 }
 

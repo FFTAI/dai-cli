@@ -1,5 +1,5 @@
 {
-  "name": "@fftai/dai-cli-command-login",
+  "name": "@fftai/dai-cli-models-zentao",
   "version": "0.1.4",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
@@ -10,12 +10,12 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "http://192.168.8.250:3000/SDY/fftai-dai-cli.git"
@@ -24,8 +24,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
+    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "@fftai/dai-cli-log": "file:../../utils/log",
-    "inquirer": "^8.2.0"
+    "axios": "^0.26.0"
   }
 }

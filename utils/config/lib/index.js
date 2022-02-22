@@ -17,7 +17,7 @@ function listConfig () {
   fse.ensureDirSync(CLI_HOME_PATH)
   if (pathExists(CLI_HOME_PATH)) {
     configList.forEach(config => {
-      log.info(config, getConfig(process.env[config]))
+      log.info(config, getConfig(config))
     })
   }
 }
