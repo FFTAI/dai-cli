@@ -78,12 +78,12 @@ function checkUserHome() {
 
 function checkENV() {
   const dotenv = require('dotenv')
-  const dotenvPath = path.resolve(userHome, '.env')
+  const dotenvPath = path.resolve(userHome, '.dai-cli-env')
   if (pathExists(dotenvPath)) {
     // 获取 env 中的环境变量
     config = dotenv.config({
       path: dotenvPath
-    })
+    }).parsed
   }
   createDefaultConfig()
   log.verbose('环境变量', config)

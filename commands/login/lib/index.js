@@ -2,6 +2,7 @@
 const inquirer = require('inquirer')
 const axios = require('axios')
 const log = require('@fftai/dai-cli-log')
+const FormData = require('form-data')
 
 const systemList = [
   'zentao',
@@ -55,19 +56,49 @@ const passwordPrompt = {
 }
 
 async function loginAction (inputSystem, { link }) {
-  link = link || '192.168.8.250:81'
+  link = link || '192.168.8.250:81/zentao'
   log.verbose('地址', link)
-  const { data } = await axios.post(`http://${link}/zentao/user-login.json`, {
-    data: {
-      account: 'sdy',
-      password: '97e27f2cb32b89431c828f0d597e3876',
-    }
-  })
-  console.log(JSON.parse(data.data))
+  const loginForm = getLoginForm()
+  const res = await axios.post(`http://${link}/user-login.json`, loginForm, { headers: loginForm.getHeaders() })
+  try {
+    console.log('paresed data', JSON.parse(res.data.data))
+  } catch (err) {
+    console.log('data', res.data)
+  }
+  // const sid = getSid(res.headers['set-cookie'])
+  // console.log(sid)
+  // if (sid) {
+  //   getMyTaskList(link, sid)
+  // }
+  // log.verbose('res', res)
   // const { system, username, password } = await getBaseInfo(inputSystem)
   // console.log('system', system)
   // console.log('username', username)
   // console.log('password', password)
+}
+
+function getLoginForm () {
+  const form = new FormData()
+  form.append('account', 'sdy')
+  form.append('password', '74328543')
+  return form
+}
+
+function getSid (cookies) {
+  const cookie = cookies.find(cookie => cookie.includes('zentaosid='))
+  if (cookie) {
+    return cookie.match(/(?<=zentaosid=)\w+/)[0]
+  }
+}
+
+async function getMyTaskList (link, sid) {
+  log.verbose('sid', sid)
+  const { data } = await axios.get(`http://${link}/my-task.json?zentaosid=${sid}`)
+  try {
+    console.log('parsed data', JSON.parse(data.data))
+  } catch (err) {
+    console.log('data', data)
+  }
 }
 
 async function getBaseInfo (inputSystem) {
