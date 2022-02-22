@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli-command-login",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -24,8 +24,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
     "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
     "inquirer": "^8.2.0"
   }
 }
