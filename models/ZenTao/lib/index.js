@@ -6,7 +6,22 @@ const axios = require('axios')
 class ZenTao {
   constructor () {
     this.requestUrl = getConfig(ZENTAO_REQUEST_URL)
+    if (!this.requestUrl) {
+      log.info(`设置蝉道 requestUrl 命令：dai config -n ZENTAO_REQUEST_URL -v 当前蝉道地址`)
+      log.info(`例如：dai config -n ZENTAO_REQUEST_URL -v http://192.168.8.250:81/zentao/`)
+      throw new Error('蝉道 requestUrl 未设置')
+    }
     this.sid = getConfig(ZENTAO_SESSION_ID)
+  }
+
+  static checkRequestUrl () {
+    const requestUrl = getConfig(ZENTAO_REQUEST_URL)
+    if (!requestUrl) {
+      log.warn(`蝉道 requestUrl 未设置`)
+      log.warn(`设置蝉道requestUrl命令：dai config -n ZENTAO_REQUEST_URL -v 当前蝉道地址`)
+      log.warn(`例如：dai config -n ZENTAO_REQUEST_URL -v http://192.168.8.250:81/zentao/`)
+      throw new Error('蝉道 requestUrl 未设置')
+    }
   }
 
   async login (account, password) {
@@ -39,7 +54,7 @@ class ZenTao {
     }
   }
 
-  listMyTask (link, sid) {
+  async listMyTask (link, sid) {
     try {
       const { data } = await axios.get(`${link}my-task.json?zentaosid=${sid}`)
       console.log(JSON.parse(data.data).tasks)

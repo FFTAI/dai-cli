@@ -59,8 +59,15 @@ async function loginAction (inputSystem) {
   log.verbose(password)
   if (system === 'zentao') {
     log.verbose('login zentao')
-    const zentao = new ZenTao()
-    zentao.login(account, password)
+    try {
+      const zentao = new ZenTao()
+      zentao.login(account, password)
+    } catch (err) {
+      log.error(err)
+    }
+  }
+  if (system === 'gitea') {
+    log.info('即将上线')
   }
 }
 
