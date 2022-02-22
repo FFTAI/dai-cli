@@ -12,9 +12,13 @@ const constant = require('./const')
 const pkg = require('../package.json')
 
 const program = new commander.Command()
-const start = require('@fftai/dai-cli-command-start')
-const login = require('@fftai/dai-cli-command-login')
+const startAction = require('@fftai/dai-cli-command-start')
+const loginAction = require('@fftai/dai-cli-command-login')
+const configAction = require('@fftai/dai-cli-command-config')
 let args, config;
+
+const ZENTAO_REQUEST_URL = '.zentao.request.url'
+const ZENTAO_SESSION_ID = '.zentao.session.id'
 
 async function core() {
   try {
@@ -63,6 +67,14 @@ function createDefaultConfig() {
     userHome,
     process.env.CLI_HOME ? process.env.CLI_HOME : constant.DEFAULT_CLI_HOME
   )
+  process.env.ZENTAO_REQUEST_URL = path.join(
+    userHome,
+    ZENTAO_REQUEST_URL
+  )
+  process.env.ZENTAO_SESSION_ID = path.join(
+    userHome,
+    ZENTAO_SESSION_ID
+  )
 }
 
 function checkRoot() {
@@ -78,7 +90,7 @@ function checkUserHome() {
 
 function checkENV() {
   const dotenv = require('dotenv')
-  const dotenvPath = path.resolve(userHome, '.dai-cli-env')
+  const dotenvPath = path.resolve(userHome, '.env')
   if (pathExists(dotenvPath)) {
     // 获取 env 中的环境变量
     config = dotenv.config({
@@ -135,13 +147,21 @@ function registerCommand() {
   program
     .command('start [name]')
     .description('开始一个任务或者修复一个bug')
-    .action(start)
+    .action(startAction)
 
   program
     .command('login [system]')
-    .option('-l, --link <link>', '服务器地址')
+    .option('-l, --link <link>', '指定服务器的请求地址')
     .description('登录某个系统')
-    .action(login)
+    .action(loginAction)
+
+  program
+    .command('config [action]')
+    .description('管理配置项')
+    .option('-l, --list', '列出所有配置项')
+    .option('-n, --name <name>', '配置项名称')
+    .option('-v, --value <value>', '配置项值')
+    .action(configAction)
 
   // 对未知命令的监听
   program.on('command:*', function (arg) {

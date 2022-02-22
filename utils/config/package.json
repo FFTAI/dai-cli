@@ -1,5 +1,5 @@
 {
-  "name": "@fftai/dai-cli-command-login",
+  "name": "@fftai/dai-cli-util-config",
   "version": "0.1.4",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
@@ -20,14 +20,13 @@
     "type": "git",
     "url": "http://192.168.8.250:3000/SDY/fftai-dai-cli.git"
   },
+  "dependencies": {
+    "@fftai/dai-cli-file": "file:../../utils/file",
+    "@fftai/dai-cli-log": "file:../../utils/log",
+    "fs-extra": "^10.0.0",
+    "path-exists": "^4.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "dependencies": {
-    "@fftai/dai-cli-util-config": "file:../../utils/config",
-    "@fftai/dai-cli-log": "file:../../utils/log",
-    "axios": "^0.26.0",
-    "inquirer": "^8.2.0",
-    "md5": "^2.3.0"
   }
 }
