@@ -1,6 +1,6 @@
 {
-  "name": "@fftai/dai-cli-util-config",
-  "version": "0.2.3",
+  "name": "@fftai/dai-cli-util",
+  "version": "0.2.4",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -10,9 +10,6 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "files": [
     "lib"
   ],
@@ -21,10 +18,6 @@
     "url": "http://192.168.8.250:3000/SDY/fftai-dai-cli.git"
   },
   "dependencies": {
-    "@fftai/dai-cli-file": "file:../../utils/file",
-    "@fftai/dai-cli-log": "file:../../utils/log",
-    "fs-extra": "^10.0.0",
-    "path-exists": "^4.0.0",
     "inquirer": "^8.2.0"
   },
   "scripts": {

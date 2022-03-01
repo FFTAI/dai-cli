@@ -1,6 +1,10 @@
 const inquirer = require('inquirer')
+const { getBaseInfo } = require('@fftai/dai-cli-util')
 const log = require('@fftai/dai-cli-log')
 const ZenTao = require('@fftai/dai-cli-models-zentao')
+const commander = require('commander')
+
+const program = new commander.Command()
 
 const systemList = [
   'zentao',
@@ -21,43 +25,30 @@ const systemPrompt = {
   }]
 }
 
-const usernamePrompt = {
-  type: 'input',
-  name: 'username',
-  message: '账号',
-  default: '',
-  validate: function (input)  {
-    const done = this.async();
-    setTimeout(function () {
-      if (!input) {
-        done(`请输入账号`);
-      }
-      done(null, true);
-    }, 0);
-  }
-}
-
-const passwordPrompt = {
-  type: 'password',
-  name: 'password',
-  message: '密码',
-  default: '',
-  validate: function (input)  {
-    const done = this.async();
-    setTimeout(function () {
-      if (!input) {
-        done(`请输入密码`);
-      }
-      done(null, true);
-    }, 0);
-  }
+function initLoginCommand () {
+  return program
+    .command('login [system]')
+    .description(`登录某个系统 目前支持的值：${systemList.join(', ')}`)
+    .action(loginAction)
 }
 
 async function loginAction (inputSystem) {
-  const { system, account, password } = await getBaseInfo(inputSystem)
+  let system = inputSystem
+
+  if (system === 'gitea') {
+    log.info('开发中...')
+    return
+  }
+
+  if (!system) {
+    const result = await inquirer.prompt(systemPrompt)
+    system = result.system
+  }
+  const { account, password } = await getBaseInfo(inputSystem)
   log.verbose(account)
   log.verbose(password)
   if (system === 'zentao') {
+    await ZenTao.checkRequestUrl()
     log.verbose('login zentao')
     try {
       const zentao = new ZenTao()
@@ -71,21 +62,4 @@ async function loginAction (inputSystem) {
   }
 }
 
-async function getBaseInfo (inputSystem) {
-  const prompts = [
-    usernamePrompt,
-    passwordPrompt
-  ]
-  if (!inputSystem || !systemList.some(sys => sys === inputSystem)) {
-    prompts.unshift(systemPrompt)
-  }
-  const { system: promptSystem, username, password } = await inquirer.prompt(prompts)
-  return {
-    system: inputSystem || promptSystem,
-    account: username,
-    password
-  }
-}
-
-
-module.exports = loginAction
+module.exports = initLoginCommand()

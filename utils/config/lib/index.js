@@ -2,6 +2,7 @@ const { writeFile, readFile } = require('@fftai/dai-cli-file')
 const fse = require('fs-extra')
 const pathExists = require('path-exists').sync
 const log = require('@fftai/dai-cli-log')
+const inquirer = require('inquirer')
 
 const ZENTAO_REQUEST_URL = 'ZENTAO_REQUEST_URL'
 const ZENTAO_SESSION_ID = 'ZENTAO_SESSION_ID'
@@ -26,12 +27,21 @@ function setConfig (name, value) {
   if (!validateConfigName(name)) {
     return
   }
-  console.log(process.env[name])
-  if (writeFile(process.env[name], value)) {
-    log.success(`写入配置成功 ${name}=${value}`)
-  } else {
-    throw new Error('写入配置失败')
+  if (!writeFile(process.env[name], value)) {
+    throw new Error(`写入配置${name}失败`)
   }
+}
+
+async function cleanConfig () {
+  const { confirm } = await inquirer.prompt({
+    name: 'confirm',
+    type: 'confirm',
+    message: '执行清空命令后，所有配置将会被清空，确定执行吗？',
+    default: false,
+  })
+  if (!confirm) return
+  configList.forEach(config => setConfig(config, ''))
+  log.success('清空配置成功')
 }
 
 function validateConfigName (name) {
@@ -58,5 +68,6 @@ module.exports = {
   listConfig,
   setConfig,
   validateConfigName,
-  getConfig
+  getConfig,
+  cleanConfig
 }

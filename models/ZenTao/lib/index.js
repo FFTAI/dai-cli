@@ -2,26 +2,44 @@ const log = require('@fftai/dai-cli-log')
 const FormData = require('form-data')
 const { setConfig, getConfig, ZENTAO_REQUEST_URL, ZENTAO_SESSION_ID } = require('@fftai/dai-cli-util-config')
 const axios = require('axios')
+const inquirer = require('inquirer')
+
+async function checkRequestUrl () {
+  const requestUrl = getConfig(ZENTAO_REQUEST_URL)
+  if (!requestUrl) {
+    log.warn(`蝉道 requestUrl 未设置`)
+    const { requestUrl } = await inquirer.prompt({
+      type: 'input',
+      name: 'requestUrl',
+      message: '请输入蝉道地址，格式：http://127.0.0.1:88/zentao/',
+      default: '',
+      validate: function (input)  {
+        const done = this.async();
+        setTimeout(function () {
+          if (!input) {
+            done(`请输入蝉道地址`);
+          }
+          done(null, true);
+        }, 0);
+      }
+    })
+    setConfig(ZENTAO_REQUEST_URL, requestUrl)
+  }
+}
 
 class ZenTao {
   constructor () {
+    this.checkRequestUrl()
     this.requestUrl = getConfig(ZENTAO_REQUEST_URL)
-    if (!this.requestUrl) {
-      log.info(`设置蝉道 requestUrl 命令：dai config set -n ZENTAO_REQUEST_URL -v 当前蝉道地址`)
-      log.info(`例如：dai config set -n ZENTAO_REQUEST_URL -v http://192.168.8.250:81/zentao/`)
-      throw new Error('蝉道 requestUrl 未设置')
-    }
     this.sid = getConfig(ZENTAO_SESSION_ID)
   }
 
-  static checkRequestUrl () {
-    const requestUrl = getConfig(ZENTAO_REQUEST_URL)
-    if (!requestUrl) {
-      log.warn(`蝉道 requestUrl 未设置`)
-      log.warn(`设置蝉道requestUrl命令：dai config -n ZENTAO_REQUEST_URL -v 当前蝉道地址`)
-      log.warn(`例如：dai config -n ZENTAO_REQUEST_URL -v http://192.168.8.250:81/zentao/`)
-      throw new Error('蝉道 requestUrl 未设置')
-    }
+  async checkRequestUrl () {
+    await checkRequestUrl()
+  }
+
+  static async checkRequestUrl () {
+    await checkRequestUrl()
   }
 
   async login (account, password) {
@@ -39,10 +57,13 @@ class ZenTao {
         log.error(res.data.reason)
       }
     } catch (err) {
-      throw new Error(err)
+      throw new Error(err.message)
     }
   }
 
+  static login (account, password) {
+    this.login(account, password)
+  }
 
   getLoginForm (account, password) {
     const form = new FormData()

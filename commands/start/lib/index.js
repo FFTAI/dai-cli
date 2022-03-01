@@ -1,4 +1,12 @@
-'use strict';
+const commander = require('commander')
+const program = new commander.Command()
+
+function initStartCommand () {
+  return program
+    .command('start [name]')
+    .description('开始一个任务或者修复一个bug')
+    .action(startAction)
+}
 
 const startsWidth = [
   'T#',
@@ -22,4 +30,4 @@ function checkName (name) {
   }
 }
 
-module.exports = startAction
+module.exports = initStartCommand()
