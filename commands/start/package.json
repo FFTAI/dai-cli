@@ -17,8 +17,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@fftai/dai-cli-log": "file:../../utils/log",
     "@fftai/dai-cli-git": "file:../../models/Git",
+    "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
+    "colors": "^1.4.0",
     "inquirer": "^8.2.0"
   },
   "repository": {
