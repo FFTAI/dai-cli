@@ -1,5 +1,7 @@
 const commander = require('commander')
 const program = new commander.Command()
+const log = require('@fftai/dai-cli-log')
+const Git = require('@fftai/dai-cli-models-zentao')
 
 function initStartCommand () {
   return program
@@ -17,8 +19,9 @@ function startAction (name) {
   if (name) {
     // 1. 校验是否以T#或者B#开头
     checkName(name)
-    // 2. 校验是否存在
-    console.log('校验是否存在')
+    // 2. 检查当前分支是否可以切出去
+    // 3. 校验是否存在
+    // 4. 
   } else {
     console.log('列出任务列表')
   }

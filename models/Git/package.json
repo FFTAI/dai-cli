@@ -22,5 +22,10 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@fftai/dai-cli-log": "file:../../utils/log",
+    "inquirer": "^8.2.0",
+    "simple-git": "^3.2.6"
   }
 }

@@ -16,6 +16,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-git": "file:../../models/Git",
+    "inquirer": "^8.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "http://192.168.8.250:3000/SDY/fftai-dai-cli.git"
