@@ -26,6 +26,7 @@
   "dependencies": {
     "@fftai/dai-cli-log": "file:../../utils/log",
     "@fftai/dai-cli-util-config": "file:../../utils/config",
+    "@fftai/dai-cli-util": "file:../../utils/util",
     "axios": "^0.26.0",
     "form-data": "^4.0.0",
     "inquirer": "^8.2.0"

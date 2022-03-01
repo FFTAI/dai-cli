@@ -28,6 +28,7 @@ class Git {
       })
       if (confirm) {
         await this.git.stash(['pop'])
+        log.success('stash pop 成功')
       }
     }
   }
