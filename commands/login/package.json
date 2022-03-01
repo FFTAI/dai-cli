@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli-command-login",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "@fftai/dai-cli-log": "file:../../utils/log",
-    "@fftai/dai-cli-util": "file:../../utils/util",
     "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
+    "@fftai/dai-cli-util": "file:../../utils/util",
     "inquirer": "^8.2.0"
   }
 }

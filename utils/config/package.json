@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli-util-config",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -24,8 +24,8 @@
     "@fftai/dai-cli-file": "file:../../utils/file",
     "@fftai/dai-cli-log": "file:../../utils/log",
     "fs-extra": "^10.0.0",
-    "path-exists": "^4.0.0",
-    "inquirer": "^8.2.0"
+    "inquirer": "^8.2.0",
+    "path-exists": "^4.0.0"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
