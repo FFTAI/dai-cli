@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli-models-zentao",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "@fftai/dai-cli-log": "file:../../utils/log",
-    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "@fftai/dai-cli-util": "file:../../utils/util",
+    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "axios": "^0.26.0",
     "form-data": "^4.0.0",
     "inquirer": "^8.2.0"
