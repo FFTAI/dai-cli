@@ -34,7 +34,7 @@ async function startAction (name) {
     // 4. 
   } else {
     const zentao = new ZenTao()
-    zentao.init()
+    await zentao.init()
     const tasks = await zentao.getMyTaskList()
     tasksList = Object.keys(tasks).map(key => tasks[key])
     waitTasksList = tasksList.filter(task => task.status === 'wait')
