@@ -28,7 +28,7 @@ function setConfig (name, value) {
     return
   }
   if (!writeFile(process.env[name], value)) {
-    throw new Error(`写入配置${name}失败`)
+    throw new Error(`写入配置${name}失败!`)
   }
 }
 
