@@ -1,5 +1,6 @@
 module.exports = core;
 
+// package
 const path = require('path')
 const semver = require('semver')
 const colors = require('colors/safe')
@@ -7,15 +8,16 @@ const userHome = require('user-home')
 const pathExists = require('path-exists').sync
 const commander = require('commander')
 const log = require('@fftai/dai-cli-log')
+const program = new commander.Command()
+const start = require('@fftai/dai-cli-command-start')
+const login = require('@fftai/dai-cli-command-login')
+const config = require('@fftai/dai-cli-command-config')
 
+// local
 const constant = require('./const')
 const pkg = require('../package.json')
 
-const program = new commander.Command()
-const startAction = require('@fftai/dai-cli-command-start')
-const loginAction = require('@fftai/dai-cli-command-login')
-const configAction = require('@fftai/dai-cli-command-config')
-let args, config;
+let args, envConfig;
 
 const ZENTAO_REQUEST_URL = '.zentao.request.url'
 const ZENTAO_SESSION_ID = '.zentao.session.id'
@@ -37,7 +39,7 @@ async function prepare() {
     // 检查当前版本是否为最新
     checkGlobalUpdate()
     // 输出版本号
-    checkPkgVersion()
+    // checkPkgVersion()
     // 检查node版本
     checkNodeVersion()
     // 检查是否为root，如果是root需要进行降权。因为root创建的文件普通用户不可读不可写
@@ -93,12 +95,12 @@ function checkENV() {
   const dotenvPath = path.resolve(userHome, '.env')
   if (pathExists(dotenvPath)) {
     // 获取 env 中的环境变量
-    config = dotenv.config({
+    envConfig = dotenv.config({
       path: dotenvPath
     }).parsed
   }
   createDefaultConfig()
-  log.verbose('环境变量', config)
+  log.verbose('环境变量', envConfig)
   log.verbose('CLI_HOME_PATH', process.env.CLI_HOME_PATH)
 }
 
@@ -145,23 +147,9 @@ function registerCommand() {
     // .action(exec)
 
   program
-    .command('start [name]')
-    .description('开始一个任务或者修复一个bug')
-    .action(startAction)
-
-  program
-    .command('login [system]')
-    .option('-l, --link <link>', '指定服务器的请求地址')
-    .description('登录某个系统')
-    .action(loginAction)
-
-  program
-    .command('config [action]')
-    .description('管理配置项')
-    .option('-l, --list', '列出所有配置项')
-    .option('-n, --name <name>', '配置项名称')
-    .option('-v, --value <value>', '配置项值')
-    .action(configAction)
+    .addCommand(start)
+    .addCommand(login)
+    .addCommand(config)
 
   // 对未知命令的监听
   program.on('command:*', function (arg) {
