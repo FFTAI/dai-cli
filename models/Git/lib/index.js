@@ -10,7 +10,7 @@ class Git {
   }
 
   async prepareBranch () {
-    log.info('prepareBranch')
+    log.info('prepareBranch~')
     // 1. 检查当前分支是否有代码
     await this.checkStash()
     // 2. 切换到 基础 分支
