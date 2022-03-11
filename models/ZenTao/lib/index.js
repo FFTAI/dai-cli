@@ -113,7 +113,7 @@ class ZenTao {
   async startTask (taskId, { time, comment, action }) {
     let _time = time
     let _comment = comment
-    if (!_time) {
+    if (!_time && action === 'start') {
       const result = await inquirer.prompt({
         type: 'input',
         name: 'time',
