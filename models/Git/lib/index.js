@@ -39,10 +39,15 @@ class Git {
       if (conflict) {
         log.error('出现冲突，请手动解决')
       }
+      log.info('未发现冲突，开始切换分支')
       // 1.5 创建并切换到目标分支
       await this.git.checkoutBranch(task)
     }
   }
+
+  async checkoutBranch (branchName) {
+    this.git.checkoutBranch(branchName, ['-b'])
+  }  
 
   async pullNewCode (branch) {
     const result = await this.git.pull('origin', branch)
