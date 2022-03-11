@@ -40,7 +40,7 @@ class Git {
       if (conflict) {
         log.error('出现冲突，请手动解决')
       }
-      log.info('未发现冲突，开始切换分支')
+      log.info(`未发现冲突，开始切换到任务分支 ${task}`)
       // 1.5 创建并切换到目标分支
       await this.git.checkoutBranch(task, checkoutBaseBranch)
       log.success('切换到开发分支成功')

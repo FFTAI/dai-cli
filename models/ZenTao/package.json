@@ -28,6 +28,7 @@
     "@fftai/dai-cli-util": "file:../../utils/util",
     "@fftai/dai-cli-util-config": "file:../../utils/config",
     "axios": "^0.26.0",
+    "dayjs": "^1.10.8",
     "form-data": "^4.0.0",
     "inquirer": "^8.2.0"
   }
