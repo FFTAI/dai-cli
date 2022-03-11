@@ -46,7 +46,7 @@ class Git {
   }
 
   async checkoutBranch (branchName) {
-    await this.git.checkoutBranch(branchName, ['-b'])
+    await this.git.checkout(branchName, ['-b'])
   }
 
   async pullNewCode (branch) {
