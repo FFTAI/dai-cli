@@ -46,8 +46,8 @@ class Git {
   }
 
   async checkoutBranch (branchName) {
-    this.git.checkoutBranch(branchName, ['-b'])
-  }  
+    await this.git.checkoutBranch(branchName, ['-b'])
+  }
 
   async pullNewCode (branch) {
     const result = await this.git.pull('origin', branch)
