@@ -39,8 +39,7 @@ class ZenTao {
       await this.checkRequestUrl()
     }
     if (!this.sid) {
-      const { account, password } = await getBaseInfo()
-      await this.login(account, password)
+      this.preLogin()
     }
   }
 
@@ -51,6 +50,11 @@ class ZenTao {
 
   static async checkRequestUrl () {
     await checkRequestUrl()
+  }
+
+  async preLogin () {
+    const { account, password } = await getBaseInfo()
+    await this.login(account, password)
   }
 
   async login (account, password) {
@@ -72,10 +76,6 @@ class ZenTao {
     }
   }
 
-  static login (account, password) {
-    this.login(account, password)
-  }
-
   getLoginForm (account, password) {
     const form = new FormData()
     form.append('account', account)
@@ -91,11 +91,21 @@ class ZenTao {
   }
 
   async getMyTaskList () {
+    let res
     try {
-      const { data } = await axios.get(`${this.requestUrl}my-task.json?zentaosid=${this.sid}`)
-      return JSON.parse(data.data).tasks
+      const res = await axios.get(`${this.requestUrl}my-task.json?zentaosid=${this.sid}`)
+      if (typeof res.data === 'string') {
+        if (res.data.includes('/user-login')) {
+          log.info('登录已过期，请重新登录')
+          await this.preLogin()
+          return await this.getMyTaskList()
+        }
+      } else {
+        return JSON.parse(res.data.data).tasks
+      }
     } catch (err) {
-      console.log('err', err)
+      log.info('出错了！')
+      log.verbose(err)
     }
   }
 

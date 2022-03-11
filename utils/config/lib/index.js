@@ -6,10 +6,12 @@ const inquirer = require('inquirer')
 
 const ZENTAO_REQUEST_URL = 'ZENTAO_REQUEST_URL'
 const ZENTAO_SESSION_ID = 'ZENTAO_SESSION_ID'
+const GIT_BASE_BRANCH = 'GIT_BASE_BRANCH'
 
 const configList = [
   ZENTAO_REQUEST_URL,
-  ZENTAO_SESSION_ID
+  ZENTAO_SESSION_ID,
+  GIT_BASE_BRANCH
 ]
 
 function listConfig () {

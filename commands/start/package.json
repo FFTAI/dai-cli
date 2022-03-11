@@ -20,8 +20,10 @@
     "@fftai/dai-cli-git": "file:../../models/Git",
     "@fftai/dai-cli-log": "file:../../utils/log",
     "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
+    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "colors": "^1.4.0",
-    "inquirer": "^8.2.0"
+    "inquirer": "^8.2.0",
+    "terminal-link": "^2.1.1"
   },
   "repository": {
     "type": "git",

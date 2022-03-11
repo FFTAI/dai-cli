@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "inquirer": "^8.2.0",
     "simple-git": "^3.2.6"
   }
