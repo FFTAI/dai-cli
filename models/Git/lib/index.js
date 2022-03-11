@@ -33,9 +33,9 @@ class Git {
       await this.git.checkout(checkoutBaseBranch)
       // 1.3 更新基础分支
       await this.pullNewCode(checkoutBaseBranch)
-      // 1.4 检查是否有冲突
-      const conflict = await this.git.checkConflict()
       log.info('更新基础分支完成')
+      // 1.4 检查是否有冲突
+      const conflict = this.git.conflicts && this.git.conflicts.length > 0
       if (conflict) {
         log.error('出现冲突，请手动解决')
       }
