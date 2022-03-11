@@ -4,6 +4,7 @@ const { setConfig, getConfig, ZENTAO_REQUEST_URL, ZENTAO_SESSION_ID } = require(
 const axios = require('axios')
 const inquirer = require('inquirer')
 const { getBaseInfo } = require('@fftai/dai-cli-util')
+const dayjs = require('dayjs')
 
 async function checkRequestUrl () {
   const requestUrl = getConfig(ZENTAO_REQUEST_URL)
@@ -109,6 +110,39 @@ class ZenTao {
     }
   }
 
+  async startTask (taskId, { time, comment, action }) {
+    let _time = time
+    let _comment = comment
+    if (!_time) {
+      const result = await inquirer.prompt({
+        type: 'input',
+        name: 'time',
+        message: '预估时间（小时）',
+        default: 1
+      })
+      _time = result.time
+    }
+    if (!_comment) {
+      const result = await inquirer.prompt({
+        type: 'input',
+        name: 'comment',
+        message: '任务备注',
+        default: ''
+      })
+      _comment = result.comment
+    }
+    const data = new FormData()
+    if (action === 'start') {
+      data.append('realStarted', dayjs().format('YYYY-MM-DD HH:mm:ss'))
+      data.append('left', +_time)
+    }
+    data.append('comment', _comment)
+    log.verbose(action)
+    const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
+    if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
+      log.info(`开始任务 T#${taskId} 成功！`)
+    }
+  }
   
 }
 
