@@ -37,7 +37,9 @@ class Git {
   }
 
   async pullNewCode (branch) {
-    await this.git.pull('origin', branch)
+    const result = await this.git.pull('origin', branch)
+    console.log('result', result)
+    return result
   }
 
   async isBranchExist (branch) {
