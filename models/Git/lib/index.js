@@ -33,6 +33,14 @@ class Git {
       await this.git.checkout(checkoutBaseBranch)
       // 1.3 更新基础分支
       await this.pullNewCode(checkoutBaseBranch)
+      // 1.4 检查是否有冲突
+      const conflict = await this.git.checkConflict()
+      log.info('更新基础分支完成')
+      if (conflict) {
+        log.error('出现冲突，请手动解决')
+      }
+      // 1.5 创建并切换到目标分支
+      await this.git.checkoutBranch(task)
     }
   }
 
@@ -82,8 +90,11 @@ class Git {
       }
       if (confirm || yes) {
         await this.git.add(['.'])
-        await this.git.commit(['-m', 'auto commit'])
+        const { commitMessage } = await inquirer.prompt({ type: 'input', name: 'commitMessage', message: '请输入commit信息', default: 'WIP' })
+        await this.git.commit(['-m', commitMessage])
         log.success('commit 成功')
+      } else {
+        throw new Error('中止操作')
       }
     }
   }

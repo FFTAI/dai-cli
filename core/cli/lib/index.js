@@ -166,3 +166,8 @@ function registerCommand() {
     program.outputHelp()
   }
 }
+
+// 错误处理
+process.on('uncaughtException', (err) => {
+  log.error(err.message)
+})
