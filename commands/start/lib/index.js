@@ -33,9 +33,9 @@ async function startAction (name, { yes, base }) {
     checkName(name)
     // 2. 检查当前分支是否可以切出去
     const git = new Git()
-    git.prepareBranch(yes)
+    await git.prepareBranch(yes)
     // 3. 切换到任务分支
-    git.checkoutTaskBranch(name, base)
+    await git.checkoutTaskBranch(name, base)
   } else {
     const zentao = new ZenTao()
     await zentao.init()
