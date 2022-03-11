@@ -27,14 +27,15 @@ const statusMap = {
   'wait': colors.green('未开始')
 }
 
-async function startAction (name, { yes }) {
+async function startAction (name, { yes, base }) {
   if (name) {
     // 1. 校验是否以T#或者B#开头
     checkName(name)
     // 2. 检查当前分支是否可以切出去
     const git = new Git()
     git.prepareBranch(yes)
-    // 3. 校验是否存在
+    // 3. 切换到任务分支
+    git.checkoutTaskBranch(name, base)
   } else {
     const zentao = new ZenTao()
     await zentao.init()

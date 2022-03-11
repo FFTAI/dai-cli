@@ -20,12 +20,12 @@ class Git {
 
   async checkoutTaskBranch (task, baseBranch) {
     // 1. 检查目标分支是否存在
-    const isExist = await isBranchExist('T#' + task.id)
+    const isExist = await this.isBranchExist(task)
     // 1.1 如果存在直接切过去
     if (isExist) {
       log.info('目标任务分支已存在，直接切换')
-      await this.git.checkout(['T#' + task.id])
-      log.success('切换分支 T#' + task.id + ' 成功')
+      await this.git.checkout([task])
+      log.success('切换分支 ' + task + ' 成功')
     } else {
       log.info('正在更新基础分支')
       const checkoutBaseBranch = baseBranch || getConfig(GIT_BASE_BRANCH) || 'master'
