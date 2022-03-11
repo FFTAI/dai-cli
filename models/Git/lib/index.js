@@ -41,12 +41,12 @@ class Git {
       }
       log.info('未发现冲突，开始切换分支')
       // 1.5 创建并切换到目标分支
-      await this.git.checkoutBranch(task)
+      await this.git.checkoutBranch(task, checkoutBaseBranch)
     }
   }
 
-  async checkoutBranch (branchName) {
-    await this.git.checkout(branchName, ['-b'])
+  async checkoutBranch (branchName, checkoutBaseBranch) {
+    await this.git.checkoutBranch(branchName, checkoutBaseBranch)
   }
 
   async pullNewCode (branch) {
