@@ -19,6 +19,7 @@ class Git {
   }
 
   async checkoutTaskBranch (task, baseBranch) {
+    log.info('正在自动切换至开发分支')
     // 1. 检查目标分支是否存在
     const isExist = await this.isBranchExist(task)
     // 1.1 如果存在直接切过去
@@ -42,6 +43,7 @@ class Git {
       log.info('未发现冲突，开始切换分支')
       // 1.5 创建并切换到目标分支
       await this.git.checkoutBranch(task, checkoutBaseBranch)
+      log.success('切换到开发分支成功')
     }
   }
 
@@ -51,7 +53,6 @@ class Git {
 
   async pullNewCode (branch) {
     const result = await this.git.pull('origin', branch)
-    console.log('result', result)
     return result
   }
 

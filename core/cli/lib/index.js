@@ -21,6 +21,7 @@ let args, envConfig;
 
 const ZENTAO_REQUEST_URL = '.zentao.request.url'
 const ZENTAO_SESSION_ID = '.zentao.session.id'
+const GIT_BASE_BRANCH = '.git.base.branch'
 
 async function core() {
   try {
@@ -76,6 +77,10 @@ function createDefaultConfig() {
   process.env.ZENTAO_SESSION_ID = path.join(
     userHome,
     ZENTAO_SESSION_ID
+  )
+  process.env.GIT_BASE_BRANCH = path.join(
+    userHome,
+    GIT_BASE_BRANCH
   )
 }
 

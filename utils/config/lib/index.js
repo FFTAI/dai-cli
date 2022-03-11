@@ -66,6 +66,7 @@ function getConfig (name) {
 module.exports = {
   ZENTAO_REQUEST_URL,
   ZENTAO_SESSION_ID,
+  GIT_BASE_BRANCH,
   configList,
   listConfig,
   setConfig,

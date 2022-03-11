@@ -13,6 +13,8 @@ function initStartCommand () {
     .command('start [name]')
     .option('-y, --yes', '同意所有自动操作。[1. 自动把 stash 区的文件 pop 出来, 2. commit 所有文件]')
     .option('-b, --base <branchName>', '设置基础分支名称')
+    .option('-t, --time <hour>', '预估时间')
+    .option('-m, --comment <comment>', '任务备注')
     .description('开始一个任务或者修复一个bug')
     .action(startAction)
 }
@@ -27,40 +29,52 @@ const statusMap = {
   'wait': colors.green('未开始')
 }
 
-async function startAction (name, { yes, base }) {
+async function startAction (name, { yes, base, time, comment }) {
   if (name) {
-    // 1. 校验是否以T#或者B#开头
-    checkName(name)
-    // 2. 检查当前分支是否可以切出去
-    const git = new Git()
-    await git.prepareBranch(yes)
-    // 3. 切换到任务分支
-    await git.checkoutTaskBranch(name, base)
+    checkoutDevBranch(name, { yes, base })
   } else {
     const zentao = new ZenTao()
     await zentao.init()
     const tasks = await zentao.getMyTaskList()
     if (tasks) {
-      tasksList = Object.keys(tasks).map(key => tasks[key])
-      waitTasksList = tasksList.filter(task => task.status === 'wait')
-      pauseTasksList = tasksList.filter(task => task.status === 'pause')
-      const requestUrl = getConfig(ZENTAO_REQUEST_URL)
-      const choices = [...waitTasksList, ...pauseTasksList].map(task => {
-        const name = terminalLink(`${statusMap[task.status]} ${colors.bold(`T#${task.id}`)} ${task.name}`, `${requestUrl}task-view-${task.id}.html`)
-        return {
-          name
-        }
-      })
-      const { task } = await inquirer.prompt({
-        type: 'list',
-        name: 'task',
-        message: '选择一个想要开始的任务',
-        choices
-      })
-      log.info('TODO：', 'GIT操作 检查分支 拉取代码等')
-      log.info('TODO：', `开始任务 ${task}`)
+      const task = await chooseStartTask(tasks)
+      const action = task.status === 'pause' ? 'restart' : 'start'
+      await checkoutDevBranch(`T#${task.id}`, { yes, base })
+      await zentao.startTask(task.id, { time, comment, action })
     }
   }
+}
+
+async function checkoutDevBranch (name, { yes, base }) {
+  // 1. 校验是否以T#或者B#开头
+  checkName(name)
+  // 2. 检查当前分支是否可以切出去
+  const git = new Git()
+  await git.prepareBranch(yes)
+  // 3. 切换到任务分支
+  await git.checkoutTaskBranch(name, base)
+}
+
+async function chooseStartTask (tasks) {
+  tasksList = Object.keys(tasks).map(key => tasks[key])
+  waitTasksList = tasksList.filter(task => task.status === 'wait')
+  pauseTasksList = tasksList.filter(task => task.status === 'pause')
+  const requestUrl = getConfig(ZENTAO_REQUEST_URL)
+  const choices = [...waitTasksList, ...pauseTasksList].map(task => {
+    const name = terminalLink(`${statusMap[task.status]} ${colors.bold(`T#${task.id}`)} ${task.name}`, `${requestUrl}task-view-${task.id}.html`)
+    return {
+      name,
+      value: task.id,
+      short: task.id,
+    }
+  })
+  const { task } = await inquirer.prompt({
+    type: 'list',
+    name: 'task',
+    message: '选择一个想要开始的任务',
+    choices
+  })
+  return tasks[task]
 }
 
 function checkName (name) {
