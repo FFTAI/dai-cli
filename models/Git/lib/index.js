@@ -34,7 +34,7 @@ class Git {
       await this.git.checkout(checkoutBaseBranch)
       // 1.3 更新基础分支
       await this.pullNewCode(checkoutBaseBranch)
-      log.info('更新基础分支完成')
+      log.info(`更新基础分支完成, ${checkoutBaseBranch} 分支已和远程同步`)
       // 1.4 检查是否有冲突
       const conflict = this.git.conflicts && this.git.conflicts.length > 0
       if (conflict) {
@@ -43,7 +43,7 @@ class Git {
       log.info(`未发现冲突，开始切换到任务分支 ${task}`)
       // 1.5 创建并切换到目标分支
       await this.git.checkoutBranch(task, checkoutBaseBranch)
-      log.success('切换到开发分支成功')
+      log.success(`切换到开发分支成功，您当前在 ${task} 分支`)
     }
   }
 
