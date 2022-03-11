@@ -140,7 +140,7 @@ class ZenTao {
     log.verbose(action)
     const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
     if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
-      log.info(`开始任务 ${taskId} 成功！`)
+      log.info(`开始任务 T#${taskId} 成功！`)
     }
   }
   

@@ -65,7 +65,7 @@ async function chooseStartTask (tasks) {
     return {
       name,
       value: task.id,
-      short: task.id,
+      short: name,
     }
   })
   const { task } = await inquirer.prompt({
