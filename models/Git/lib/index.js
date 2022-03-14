@@ -35,7 +35,7 @@ class Git {
       // 1.3 更新基础分支
       await this.pullNewCode(checkoutBaseBranch)
       log.info(`更新基础分支完成, ${checkoutBaseBranch} 分支已和远程同步`)
-      // 1.4 检查是否有冲突
+      // 1.4 检查是否有冲突s
       const conflict = this.git.conflicts && this.git.conflicts.length > 0
       if (conflict) {
         log.error('出现冲突，请手动解决')
@@ -82,7 +82,7 @@ class Git {
   }
 
   async checkChanges (yes) {
-    const changes = await this.git.diffSummary()
+    const changes = await this.git.status()
     if (changes.files.length > 0) {
       let confirm = false
       if (!yes) {
