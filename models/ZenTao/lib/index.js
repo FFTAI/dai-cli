@@ -6,6 +6,7 @@ const inquirer = require('inquirer')
 const { getBaseInfo } = require('@fftai/dai-cli-util')
 const dayjs = require('dayjs')
 const colors = require('colors/safe')
+const terminalLink = require('terminal-link')
 
 async function checkRequestUrl () {
   const requestUrl = getConfig(ZENTAO_REQUEST_URL)
@@ -41,7 +42,7 @@ class ZenTao {
       await this.checkRequestUrl()
     }
     if (!this.sid) {
-      this.preLogin()
+      await this.preLogin()
     }
   }
 
@@ -143,6 +144,19 @@ class ZenTao {
     const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
     if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
       log.success(`开始任务成功！您当前已在 ${taskName} ${colors.magenta('分支。')}`)
+    } else {
+      try {
+        const data = JSON.parse(res.data.data)
+        if (data.bugIds && data.bugIds.length) {
+          log.error(`开始任务失败！`)
+          log.error(`当前有未解决的bug：${data.bugIds.map(id => `B#${id}`).join(',')}`)
+          data.bugIds.forEach(id => {
+            log.info(terminalLink(`B#${id}`, `${this.requestUrl}bug-view${id}.html`))
+          })
+        }
+      } catch (err) {
+        log.error('开始任务失败！请在蝉道手动开始任务！')
+      }
     }
   }
   
