@@ -48,7 +48,7 @@ class Git {
     }
     log.info(checkoutMessage('------自动切换至开发分支成功------'))
     
-    log.success(`您当前在 ${colors.bold(colors.cyan(`T#${task}`))} ${colors.magenta('分支。')}`)
+    log.success(`您当前在 ${colors.bold(colors.cyan(`${task}`))} ${colors.magenta('分支。')}`)
   }
 
   async checkoutBranch (branchName, checkoutBaseBranch) {
