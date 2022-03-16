@@ -44,7 +44,8 @@ async function startAction (name, { yes, base, time, comment }) {
     const zentao = new ZenTao()
     await zentao.init()
     const tasks = await zentao.getMyTaskList()
-    if (tasks) {
+    const taskList = Object.keys(tasks)
+    if (taskList && taskList.length) {
       log.verbose('tasks', tasks)
       const task = await chooseStartTask(tasks)
       const action = task.status === 'pause' ? 'restart' : 'start'
@@ -69,11 +70,15 @@ async function chooseStartTask (tasks) {
   waitTasksList = tasksList.filter(task => task.status === 'wait')
   pauseTasksList = tasksList.filter(task => task.status === 'pause')
   let choices = [...waitTasksList, ...pauseTasksList]
+  if (!choices || !choices.length) {
+    throw new Error('当前没有任务可以开始')
+  }
   choices.sort((a, b) => a.pri - b.pri)
   choices = choices.map(task => {
     const name = `${priorityMap[task.pri]} ${colors.bold(`T#${task.id}`)} ${statusMap[task.status]} ${task.name}`
+    const link = `${getConfig(ZENTAO_REQUEST_URL)}task-view-${task.id}.html`
     return {
-      name,
+      name: terminalLink(name, link),
       value: task.id,
       short: name,
     }

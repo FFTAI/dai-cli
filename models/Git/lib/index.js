@@ -101,7 +101,7 @@ class Git {
         confirm = result.confirm
       }
       if (confirm || yes) {
-        await this.git.add(['.'])
+        await this.git.add(['-A'])
         const { commitMessage } = await inquirer.prompt({ type: 'input', name: 'commitMessage', message: '请输入commit信息', default: 'WIP' })
         await this.git.commit(commitMessage)
         log.success('commit 成功')
