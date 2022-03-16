@@ -20,6 +20,7 @@ class Git {
   }
 
   async checkoutTaskBranch (task, baseBranch) {
+    const taskName = colors.bold(colors.cyan(`T#${1234}`))
     log.success(`开始任务成功！您当前已在 ${taskName} ${colors.magenta('分支。')}`)
     const checkoutMessage = (str) => colors.bold(colors.cyan(str))
     log.info(checkoutMessage('------正在自动切换至开发分支------'))
