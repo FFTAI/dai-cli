@@ -68,7 +68,6 @@ async function chooseStartTask (tasks) {
   tasksList = Object.keys(tasks).map(key => tasks[key])
   waitTasksList = tasksList.filter(task => task.status === 'wait')
   pauseTasksList = tasksList.filter(task => task.status === 'pause')
-  const requestUrl = getConfig(ZENTAO_REQUEST_URL)
   let choices = [...waitTasksList, ...pauseTasksList]
   choices.sort((a, b) => a.pri - b.pri)
   choices = choices.map(task => {
