@@ -114,7 +114,7 @@ class ZenTao {
   async startTask (taskId, { time, comment, action }) {
     let _time = time
     let _comment = comment
-    const taskName = colors.bgYellow(`T#${taskId}`)
+    const taskName = colors.bold(colors.cyan(`T#${taskId}`))
     if (!_time && action === 'start') {
       const result = await inquirer.prompt({
         type: 'input',
@@ -142,7 +142,7 @@ class ZenTao {
     log.verbose(action)
     const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
     if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
-      log.success(`开始任务成功！您当前已在 ${taskName} 分支。`)
+      log.success(`开始任务成功！您当前已在 ${taskName} ${colors.magenta('分支。')}`)
     }
   }
   
