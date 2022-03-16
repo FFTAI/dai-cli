@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli-command-config",
-  "version": "0.2.10",
+  "version": "0.2.12",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -21,8 +21,8 @@
     "url": "http://192.168.8.250:3000/SDY/fftai-dai-cli.git"
   },
   "dependencies": {
-    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "commander": "^9.0.0"
   },
   "scripts": {
