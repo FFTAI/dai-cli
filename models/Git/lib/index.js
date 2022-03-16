@@ -2,6 +2,7 @@ const simpleGit = require('simple-git')
 const log = require('@fftai/dai-cli-log')
 const inquirer = require('inquirer')
 const { getConfig, GIT_BASE_BRANCH } = require('@fftai/dai-cli-util-config')
+const colors = require('colors/safe')
 
 class Git {
 
@@ -19,16 +20,15 @@ class Git {
   }
 
   async checkoutTaskBranch (task, baseBranch) {
-    log.info('正在自动切换至开发分支')
+    const checkoutMessage = (str) => colors.bold(colors.cyan(str))
+    log.info(checkoutMessage('------正在自动切换至开发分支------'))
     // 1. 检查目标分支是否存在
     const isExist = await this.isBranchExist(task)
     // 1.1 如果存在直接切过去
     if (isExist) {
       log.info('目标任务分支已存在，直接切换')
       await this.git.checkout([task])
-      log.success('切换分支 ' + task + ' 成功')
     } else {
-      
       const checkoutBaseBranch = baseBranch || getConfig(GIT_BASE_BRANCH) || 'master'
       // 1.2 如果不存在更新 「基础」 分支后切换过去
       log.info(`正在切换至基础分支 ${checkoutBaseBranch}`)
@@ -45,8 +45,9 @@ class Git {
       log.info(`未发现冲突，开始切换到任务分支 ${task}`)
       // 1.5 创建并切换到目标分支
       await this.git.checkoutBranch(task, checkoutBaseBranch)
-      log.success(`切换到开发分支成功，您当前在 ${task} 分支`)
     }
+    log.info(checkoutMessage('------自动切换至开发分支成功------'))
+    log.success(`您当前在 ${task} 分支`)
   }
 
   async checkoutBranch (branchName, checkoutBaseBranch) {
