@@ -20,32 +20,32 @@ class Git {
   }
 
   async checkoutTaskBranch (task, baseBranch) {
-    const checkoutMessage = (str) => colors.bgWhite(colors.cyan(str))
+    const checkoutMessage = (str) => colors.cyan(str)
     log.info(checkoutMessage('------正在自动切换至开发分支------'))
-    // // 1. 检查目标分支是否存在
-    // const isExist = await this.isBranchExist(task)
-    // // 1.1 如果存在直接切过去
-    // if (isExist) {
-    //   log.info('目标任务分支已存在，直接切换')
-    //   await this.git.checkout([task])
-    // } else {
-    //   const checkoutBaseBranch = baseBranch || getConfig(GIT_BASE_BRANCH) || 'master'
-    //   // 1.2 如果不存在更新 「基础」 分支后切换过去
-    //   log.info(`正在切换至基础分支 ${checkoutBaseBranch}`)
-    //   await this.git.checkout(checkoutBaseBranch)
-    //   log.info('正在更新基础分支')
-    //   // 1.3 更新基础分支
-    //   await this.pullNewCode(checkoutBaseBranch)
-    //   log.info(`更新基础分支完成, ${checkoutBaseBranch} 分支已和远程同步`)
-    //   // 1.4 检查是否有冲突s
-    //   const conflict = this.git.conflicts && this.git.conflicts.length > 0
-    //   if (conflict) {
-    //     log.error('出现冲突，请手动解决')
-    //   }
-    //   log.info(`未发现冲突，开始切换到任务分支 ${task}`)
-    //   // 1.5 创建并切换到目标分支
-    //   await this.git.checkoutBranch(task, checkoutBaseBranch)
-    // }
+    // 1. 检查目标分支是否存在
+    const isExist = await this.isBranchExist(task)
+    // 1.1 如果存在直接切过去
+    if (isExist) {
+      log.info('目标任务分支已存在，直接切换')
+      await this.git.checkout([task])
+    } else {
+      const checkoutBaseBranch = baseBranch || getConfig(GIT_BASE_BRANCH) || 'master'
+      // 1.2 如果不存在更新 「基础」 分支后切换过去
+      log.info(`正在切换至基础分支 ${checkoutBaseBranch}`)
+      await this.git.checkout(checkoutBaseBranch)
+      log.info('正在更新基础分支')
+      // 1.3 更新基础分支
+      await this.pullNewCode(checkoutBaseBranch)
+      log.info(`更新基础分支完成, ${checkoutBaseBranch} 分支已和远程同步`)
+      // 1.4 检查是否有冲突s
+      const conflict = this.git.conflicts && this.git.conflicts.length > 0
+      if (conflict) {
+        log.error('出现冲突，请手动解决')
+      }
+      log.info(`未发现冲突，开始切换到任务分支 ${task}`)
+      // 1.5 创建并切换到目标分支
+      await this.git.checkoutBranch(task, checkoutBaseBranch)
+    }
     log.info(checkoutMessage('------自动切换至开发分支成功------'))
     log.success(`您当前在 ${task} 分支`)
   }
