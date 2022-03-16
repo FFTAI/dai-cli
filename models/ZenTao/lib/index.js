@@ -5,6 +5,7 @@ const axios = require('axios')
 const inquirer = require('inquirer')
 const { getBaseInfo } = require('@fftai/dai-cli-util')
 const dayjs = require('dayjs')
+const colors = require('colors/safe')
 
 async function checkRequestUrl () {
   const requestUrl = getConfig(ZENTAO_REQUEST_URL)
@@ -140,7 +141,7 @@ class ZenTao {
     log.verbose(action)
     const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
     if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
-      log.success(`开始任务 T#${taskId} 成功！`)
+      log.success(`开始任务成功！您当前已在 ${colors.bgYellow(`T#${taskId}`)} 分支。`)
     }
   }
   
