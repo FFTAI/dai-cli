@@ -151,7 +151,7 @@ class ZenTao {
           log.error(`开始任务失败！`)
           log.error(`当前有未解决的bug：${data.bugIds.map(id => `B#${id}`).join(',')}`)
           data.bugIds.forEach(id => {
-            log.info(terminalLink(`B#${id}`, `${this.requestUrl}bug-view${id}.html`))
+            log.info(terminalLink(`B#${id}`, `${this.requestUrl}bug-view-${id}.html`))
           })
         }
       } catch (err) {
