@@ -47,7 +47,8 @@ class Git {
       await this.git.checkoutBranch(task, checkoutBaseBranch)
     }
     log.info(checkoutMessage('------自动切换至开发分支成功------'))
-    log.success(`您当前在 ${task} 分支`)
+    
+    log.success(`您当前在 ${colors.bold(colors.cyan(`T#${task}`))} ${colors.magenta('分支。')}`)
   }
 
   async checkoutBranch (branchName, checkoutBaseBranch) {
@@ -89,10 +90,12 @@ class Git {
     if (changes.files.length > 0) {
       let confirm = false
       if (!yes) {
+        const { current: currentBranch } = await this.git.branchLocal()
+        console.log(currentBranch)
         const result = await inquirer.prompt({
           name: 'confirm',
           type: 'confirm',
-          message: '当前存在未提交的文件，是否执行 commit 操作？',
+          message: `当前分支 ${colors.cyan(currentBranch)} 存在未提交的文件，是否执行 commit 操作？`,
           default: true,
         })
         confirm = result.confirm
