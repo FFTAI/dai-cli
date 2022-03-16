@@ -21,7 +21,9 @@
     "url": "http://192.168.8.250:3000/SDY/fftai-dai-cli.git"
   },
   "dependencies": {
-    "@fftai/dai-cli-util-config": "file:../../utils/config"
+    "@fftai/dai-cli-util-config": "file:../../utils/config",
+    "@fftai/dai-cli-log": "file:../../utils/log",
+    "commander": "^9.0.0"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"

@@ -25,8 +25,16 @@ const startsWidth = [
 ]
 
 const statusMap = {
-  'pause': colors.yellow('暂停中'),
-  'wait': colors.green('未开始')
+  'pause': colors.brightYellow('暂停中'),
+  'wait': colors.brightGreen('未开始')
+}
+
+const priorityMap = {
+  '1': colors.red.inverse('【高1】'),
+  '2': colors.yellow.inverse('【中2】'),
+  '3': colors.green.inverse('【常3】'),
+  '4': colors.cyan.inverse('【低4】'),
+  '5': colors.gray.inverse('【微5】')
 }
 
 async function startAction (name, { yes, base, time, comment }) {
@@ -37,6 +45,7 @@ async function startAction (name, { yes, base, time, comment }) {
     await zentao.init()
     const tasks = await zentao.getMyTaskList()
     if (tasks) {
+      log.verbose('tasks', tasks)
       const task = await chooseStartTask(tasks)
       const action = task.status === 'pause' ? 'restart' : 'start'
       await checkoutDevBranch(`T#${task.id}`, { yes, base })
@@ -60,8 +69,10 @@ async function chooseStartTask (tasks) {
   waitTasksList = tasksList.filter(task => task.status === 'wait')
   pauseTasksList = tasksList.filter(task => task.status === 'pause')
   const requestUrl = getConfig(ZENTAO_REQUEST_URL)
-  const choices = [...waitTasksList, ...pauseTasksList].map(task => {
-    const name = terminalLink(`${statusMap[task.status]} ${colors.bold(`T#${task.id}`)} ${task.name}`, `${requestUrl}task-view-${task.id}.html`)
+  let choices = [...waitTasksList, ...pauseTasksList]
+  choices.sort((a, b) => a.pri - b.pri)
+  choices = choices.map(task => {
+    const name = `${priorityMap[task.pri]} ${colors.bold(`T#${task.id}`)} ${statusMap[task.status]} ${task.name}`
     return {
       name,
       value: task.id,
