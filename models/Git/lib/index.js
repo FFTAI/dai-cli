@@ -20,7 +20,7 @@ class Git {
   }
 
   async checkoutTaskBranch (task, baseBranch) {
-    const checkoutMessage = (str) => colors.cyan(str)
+    const checkoutMessage = (str) => colors.bold(colors.cyan(str))
     log.info(checkoutMessage('------正在自动切换至开发分支------'))
     // 1. 检查目标分支是否存在
     const isExist = await this.isBranchExist(task)
