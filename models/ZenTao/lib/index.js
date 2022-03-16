@@ -114,7 +114,7 @@ class ZenTao {
   async startTask (taskId, { time, comment, action }) {
     let _time = time
     let _comment = comment
-    const taskName = colors.bgYellow(`T#${taskId}`)
+    const taskName = colors.white(colors.bgYellow(`T#${taskId}`))
     if (!_time && action === 'start') {
       const result = await inquirer.prompt({
         type: 'input',
