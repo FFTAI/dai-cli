@@ -1,0 +1,33 @@
+{
+  "name": "@fftai/dai-cli-command-pause",
+  "version": "0.2.14",
+  "description": "> TODO: description",
+  "author": "daiyan.Shen <daishan526@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://192.168.8.250:3000/SDY/fftai-dai-cli.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
+    "@fftai/dai-cli-util": "file:../../utils/util",
+    "commander": "^9.0.0",
+    "inquirer": "^8.2.0"
+  }
+}
