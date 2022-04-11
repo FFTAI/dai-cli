@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "dai-cli 核心库",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -27,8 +27,8 @@
     "@fftai/dai-cli-command-login": "file:../../commands/login",
     "@fftai/dai-cli-command-start": "file:../../commands/start",
     "@fftai/dai-cli-get-npm-info": "file:../../utils/get-npm-info",
-    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-util-config": "file:../../utils/config",
     "colors": "^1.4.0",
     "commander": "^9.0.0",
     "dotenv": "^16.0.0",
