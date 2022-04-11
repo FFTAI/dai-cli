@@ -3,6 +3,7 @@ const fse = require('fs-extra')
 const pathExists = require('path-exists').sync
 const log = require('@fftai/dai-cli-log')
 const inquirer = require('inquirer')
+const constant = require('./contant')
 
 const ZENTAO_REQUEST_URL = 'ZENTAO_REQUEST_URL'
 const ZENTAO_SESSION_ID = 'ZENTAO_SESSION_ID'
@@ -64,6 +65,7 @@ function getConfig (name) {
 }
 
 module.exports = {
+  constant,
   ZENTAO_REQUEST_URL,
   ZENTAO_SESSION_ID,
   GIT_BASE_BRANCH,

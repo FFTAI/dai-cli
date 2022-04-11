@@ -12,16 +12,11 @@ const program = new commander.Command()
 const start = require('@fftai/dai-cli-command-start')
 const login = require('@fftai/dai-cli-command-login')
 const config = require('@fftai/dai-cli-command-config')
+const { constant: { PATH_ZENTAO_REQUEST_URL, PATH_ZENTAO_SESSION_ID, PATH_GIT_BASE_BRANCH, LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } } = require('@fftai/dai-cli-util-config')
 
-// local
-const constant = require('./const')
 const pkg = require('../package.json')
 
 let args, envConfig;
-
-const ZENTAO_REQUEST_URL = '.zentao.request.url'
-const ZENTAO_SESSION_ID = '.zentao.session.id'
-const GIT_BASE_BRANCH = '.git.base.branch'
 
 async function core() {
   try {
@@ -59,7 +54,6 @@ function checkPkgVersion() {
 
 function checkNodeVersion () {
   const nodeVersion = process.version
-  const LOWEST_NODE_VERSION = constant.LOWEST_NODE_VERSION
   if (semver.gt(LOWEST_NODE_VERSION, nodeVersion)) {
     throw new Error(`当前node版本为 ${nodeVersion}，请升级至 v${LOWEST_NODE_VERSION} 以上版本`)
   }
@@ -68,19 +62,19 @@ function checkNodeVersion () {
 function createDefaultConfig() {
   process.env.CLI_HOME_PATH = path.join(
     userHome,
-    process.env.CLI_HOME ? process.env.CLI_HOME : constant.DEFAULT_CLI_HOME
+    process.env.CLI_HOME ? process.env.CLI_HOME : DEFAULT_CLI_HOME
   )
   process.env.ZENTAO_REQUEST_URL = path.join(
     userHome,
-    ZENTAO_REQUEST_URL
+    PATH_ZENTAO_REQUEST_URL
   )
   process.env.ZENTAO_SESSION_ID = path.join(
     userHome,
-    ZENTAO_SESSION_ID
+    PATH_ZENTAO_SESSION_ID
   )
   process.env.GIT_BASE_BRANCH = path.join(
     userHome,
-    GIT_BASE_BRANCH
+    PATH_GIT_BASE_BRANCH
   )
 }
 
