@@ -94,14 +94,15 @@ class ZenTao {
   }
 
   async getMyTaskList () {
-    let res
     try {
       const res = await axios.get(`${this.requestUrl}my-task.json?zentaosid=${this.sid}`)
       if (typeof res.data === 'string') {
         if (res.data.includes('/user-login')) {
           log.info('登录已过期，请重新登录')
           await this.preLogin()
-          return await this.getMyTaskList()
+          const list = await this.getMyTaskList()
+          log.verbose('MyTaskList', list.data)
+          return list
         }
       } else {
         return JSON.parse(res.data.data).tasks
@@ -158,6 +159,22 @@ class ZenTao {
         log.error('开始任务失败！请在蝉道手动开始任务！')
       }
     }
+  }
+
+  static startsWith = ['T#', 'B#']
+
+  static statusMap = {
+    'pause': colors.brightYellow('暂停中'),
+    'wait': colors.brightGreen('未开始'),
+    'doing': colors.blue('进行中')
+  }
+
+  static priorityMap = {
+    '1': colors.red.inverse('【高1】'),
+    '2': colors.yellow.inverse('【中2】'),
+    '3': colors.green.inverse('【常3】'),
+    '4': colors.cyan.inverse('【低4】'),
+    '5': colors.gray.inverse('【微5】')
   }
   
 }

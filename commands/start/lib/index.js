@@ -15,27 +15,12 @@ function initStartCommand () {
     .option('-b, --base <branchName>', '设置基础分支名称')
     .option('-t, --time <hour>', '预估时间')
     .option('-m, --comment <comment>', '任务备注')
-    .description('开始一个任务或者修复一个bug')
+    .option('-sz, --skip-branch-control', '只在蝉道开始任务，跳过分支管理')
+    .description('开始一个任务')
     .action(startAction)
 }
 
-const startsWidth = [
-  'T#',
-  'B#'
-]
-
-const statusMap = {
-  'pause': colors.brightYellow('暂停中'),
-  'wait': colors.brightGreen('未开始')
-}
-
-const priorityMap = {
-  '1': colors.red.inverse('【高1】'),
-  '2': colors.yellow.inverse('【中2】'),
-  '3': colors.green.inverse('【常3】'),
-  '4': colors.cyan.inverse('【低4】'),
-  '5': colors.gray.inverse('【微5】')
-}
+const { startsWith, statusMap, priorityMap } = ZenTao
 
 async function startAction (name, { yes, base, time, comment }) {
   if (name) {
@@ -93,7 +78,7 @@ async function chooseStartTask (tasks) {
 }
 
 function checkName (name) {
-  if (!startsWidth.includes(name.substr(0, 2))) {
+  if (!startsWith.includes(name.substr(0, 2))) {
     throw new Error('<name> 必须以T#或者B#开头')
   }
 }
