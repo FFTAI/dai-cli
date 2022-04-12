@@ -165,7 +165,7 @@ class ZenTao {
     log.verbose(action)
     const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
     if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
-      log.success(`开始任务成功！您当前已在 ${taskName} ${colors.magenta('分支。')}`)
+      log.success(`开始任务成功！${taskName}`)
     } else {
       try {
         const data = JSON.parse(res.data.data)

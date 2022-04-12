@@ -15,18 +15,20 @@ function initStartCommand () {
     .option('-b, --base <branchName>', '设置基础分支名称')
     .option('-t, --time <hour>', '预估时间')
     .option('-m, --comment <comment>', '任务备注')
-    .option('-sz, --skip-branch-control', '只在蝉道开始任务，跳过分支管理')
+    .option('-sg, --skip-git-control', '只在蝉道开始任务，跳过分支管理')
     .description('开始一个任务')
     .action(startAction)
 }
 
 const { startsWith, statusMap, priorityMap } = ZenTao
 
-async function startAction (name, { yes, base, time, comment }) {
+async function startAction (name, { yes, base, time, comment, skipGitControl }) {
   const zentao = new ZenTao()
   await zentao.init()
   if (name) {
-    await checkoutDevBranch(name, { yes, base })
+    if (!skipGitControl) {
+      await checkoutDevBranch(name, { yes, base })
+    }
     const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
     if (task.status === 'doing') {
       throw new Error('该任务已经处于进行中状态')

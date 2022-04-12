@@ -25,7 +25,12 @@ async function pauseAction (name, { list, comment }) {
   if (name) {
     // 如果传入名字，则检查名字是否合法
     checkName(name)
-    await zentao.pauseTask(ZenTao.getIdByName(name), { comment })
+    const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
+    if (task.status === 'pause') {
+      throw new Error('该任务已经处于暂停状态')
+    } else {
+      await zentao.pauseTask(ZenTao.getIdByName(name), { comment })
+    }
   } else {
     const tasks = await zentao.getMyTaskList()
     const taskList = Object.keys(tasks)
