@@ -14,7 +14,7 @@ function initStartCommand () {
     .option('-l, --list', '列出所有可以暂停的任务')
     .option('-m, --comment <comment>', '任务备注')
     .description('暂停一个任务')
-    .action(startAction)
+    .action(pauseAction)
 }
 
 const { startsWith, statusMap, priorityMap } = ZenTao
@@ -27,7 +27,9 @@ async function pauseAction (name, { list, comment }) {
   if (taskList && taskList.length) {
     log.verbose('tasks', tasks)
     const task = await choosePauseTask(tasks)
-    console.log(task)
+    if (task) {
+      await zentao.pauseTask(task.id, { comment })
+    }
   }
 }
 

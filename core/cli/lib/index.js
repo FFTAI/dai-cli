@@ -10,6 +10,7 @@ const commander = require('commander')
 const log = require('@fftai/dai-cli-log')
 const program = new commander.Command()
 const start = require('@fftai/dai-cli-command-start')
+const pause = require('@fftai/dai-cli-command-pause')
 const login = require('@fftai/dai-cli-command-login')
 const config = require('@fftai/dai-cli-command-config')
 const { constant: { PATH_ZENTAO_REQUEST_URL, PATH_ZENTAO_SESSION_ID, PATH_GIT_BASE_BRANCH, LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } } = require('@fftai/dai-cli-util-config')
@@ -147,6 +148,7 @@ function registerCommand() {
 
   program
     .addCommand(start)
+    .addCommand(pause)
     .addCommand(login)
     .addCommand(config)
 

@@ -161,6 +161,32 @@ class ZenTao {
     }
   }
 
+  async pauseTask (taskId, { comment }) {
+    let _comment = comment
+    if (!_comment) {
+      const result = await inquirer.prompt({
+        type: 'input',
+        name: 'comment',
+        message: '任务备注',
+        default: ''
+      })
+      _comment = result.comment
+    }
+    const data = new FormData()
+    data.append('comment', _comment)
+    const res = await axios.post(`${this.requestUrl}task-pause-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
+    if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
+      log.success(`暂停任务成功！`)
+    } else {
+      try {
+        JSON.parse(res.data.data)
+      } catch (err) {
+        log.error('暂停任务失败！请在蝉道手动开始任务！')
+        log.info(`${this.requestUrl}task-view-${taskId}.html`)
+      }
+    }
+  }
+
   static startsWith = ['T#', 'B#']
 
   static statusMap = {
