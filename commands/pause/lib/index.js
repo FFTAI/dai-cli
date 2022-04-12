@@ -22,13 +22,19 @@ const { startsWith, statusMap, priorityMap } = ZenTao
 async function pauseAction (name, { list, comment }) {
   const zentao = new ZenTao()
   await zentao.init()
-  const tasks = await zentao.getMyTaskList()
-  const taskList = Object.keys(tasks)
-  if (taskList && taskList.length) {
-    log.verbose('tasks', tasks)
-    const task = await choosePauseTask(tasks)
-    if (task) {
-      await zentao.pauseTask(task.id, { comment })
+  if (name) {
+    // 如果传入名字，则检查名字是否合法
+    checkName(name)
+    await zentao.pauseTask(ZenTao.getIdByName(name), { comment })
+  } else {
+    const tasks = await zentao.getMyTaskList()
+    const taskList = Object.keys(tasks)
+    if (taskList && taskList.length) {
+      log.verbose('tasks', tasks)
+      const task = await choosePauseTask(tasks)
+      if (task) {
+        await zentao.pauseTask(task.id, { comment })
+      }
     }
   }
 }

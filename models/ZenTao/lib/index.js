@@ -8,6 +8,15 @@ const dayjs = require('dayjs')
 const colors = require('colors/safe')
 const terminalLink = require('terminal-link')
 
+
+const startsWith = ['T#', 'B#']
+
+function checkName (name) {
+  if (!startsWith.includes(name.substr(0, 2))) {
+    throw new Error('<name> 必须以T#或者B#开头')
+  }
+}
+
 async function checkRequestUrl () {
   const requestUrl = getConfig(ZENTAO_REQUEST_URL)
   if (!requestUrl) {
@@ -90,6 +99,18 @@ class ZenTao {
     const cookie = cookies.find(cookie => cookie.includes('zentaosid='))
     if (cookie) {
       return cookie.match(/(?<=zentaosid=)\w+/)[0]
+    }
+  }
+
+  async getTaskInfo (taskId) {
+    try {
+      const res = await axios.get(`${this.requestUrl}task-view-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`)
+      if (res.data && res.data.data) {
+        log.verbose('data', JSON.parse(res.data.data))
+        return JSON.parse(res.data.data)
+      }
+    } catch (err) {
+      log.error('获取失败任务信息', err)
     }
   }
 
@@ -187,7 +208,16 @@ class ZenTao {
     }
   }
 
-  static startsWith = ['T#', 'B#']
+  checkName = checkName
+
+  static checkName = checkName
+
+  static getIdByName (name) {
+    this.checkName(name)
+    return name.replace('T#', '').replace('B#', '')
+  }
+
+  static startsWith = startsWith
 
   static statusMap = {
     'pause': colors.brightYellow('暂停中'),
@@ -204,5 +234,6 @@ class ZenTao {
   }
   
 }
+
 
 module.exports = ZenTao

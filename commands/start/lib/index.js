@@ -23,11 +23,18 @@ function initStartCommand () {
 const { startsWith, statusMap, priorityMap } = ZenTao
 
 async function startAction (name, { yes, base, time, comment }) {
+  const zentao = new ZenTao()
+  await zentao.init()
   if (name) {
-    checkoutDevBranch(name, { yes, base })
+    await checkoutDevBranch(name, { yes, base })
+    const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
+    if (task.status === 'doing') {
+      throw new Error('该任务已经处于进行中状态')
+    } else {
+      const action = task.status === 'pause' ? 'restart' : 'start'
+      await zentao.startTask(ZenTao.getIdByName(name), { time, comment, action })
+    }
   } else {
-    const zentao = new ZenTao()
-    await zentao.init()
     const tasks = await zentao.getMyTaskList()
     const taskList = Object.keys(tasks)
     if (taskList && taskList.length) {
@@ -42,7 +49,7 @@ async function startAction (name, { yes, base, time, comment }) {
 
 async function checkoutDevBranch (name, { yes, base }) {
   // 1. 校验是否以T#或者B#开头
-  checkName(name)
+  ZenTao.checkName(name)
   // 2. 检查当前分支是否可以切出去
   const git = new Git()
   await git.prepareBranch(yes)
@@ -75,12 +82,6 @@ async function chooseStartTask (tasks) {
     choices
   })
   return tasks[task]
-}
-
-function checkName (name) {
-  if (!startsWith.includes(name.substr(0, 2))) {
-    throw new Error('<name> 必须以T#或者B#开头')
-  }
 }
 
 module.exports = initStartCommand()
