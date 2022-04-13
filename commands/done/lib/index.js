@@ -29,7 +29,7 @@ async function prepare ({ yes, base }) {
   await inquirer.prompt({
     type: 'confirm',
     name: 'task',
-    message: `确认要提交 ${colors.blue(name)} 分支的代码吗？`,
+    message: `确认要提交 ${colors.cyan(name)} 分支的代码吗？`,
   })
   log.verbose(name, 'name')
   // 1. 校验是否以T#或者B#开头

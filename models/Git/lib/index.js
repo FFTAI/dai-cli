@@ -30,7 +30,7 @@ class Git {
       log.info('目标任务分支已存在，直接切换')
       await this.git.checkout([task])
     } else {
-      const checkoutBaseBranch = baseBranch || getConfig(GIT_BASE_BRANCH) || 'master'
+      const checkoutBaseBranch = this.getBaseBranch(baseBranch)
       // 1.2 如果不存在更新 「基础」 分支后切换过去
       log.info(`正在切换至基础分支 ${checkoutBaseBranch}`)
       await this.git.checkout(checkoutBaseBranch)
@@ -49,6 +49,10 @@ class Git {
     log.success(`您当前在 ${colors.bold(colors.cyan(`${task}`))} ${colors.magenta('分支。')}`)
   }
 
+  async getBaseBranch (baseBranch) {
+    return baseBranch || getConfig(GIT_BASE_BRANCH) || 'master'
+  }
+
   async checkoutConflict () {
     const conflict = this.git.conflicts && this.git.conflicts.length > 0
     if (conflict) {
@@ -58,7 +62,7 @@ class Git {
 
   async prepareBaseBranch (baseBranch) {
     log.info(checkoutMessage('------正在下载基础分支------'))
-    await this.git.fetch(['origin', baseBranch])
+    await this.git.fetch(['origin', this.getBaseBranch(baseBranch)])
     log.success(checkoutMessage('------下载基础分支成功------'))
   }
 
