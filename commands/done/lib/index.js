@@ -38,9 +38,9 @@ async function prepare ({ yes, base }) {
   // 3. commit代码等
   await git.prepareBranch(yes)
   // 4. 更新base
-  await git.prepareBaseBranch(base)
+  const baseBranch = await git.prepareBaseBranch(base)
   // 5. 合并分支
-  await git.mergeBranch(base)
+  await git.mergeBranch(baseBranch)
   // 6. push代码
   await git.pushBranchWithSameName(name)
 }
