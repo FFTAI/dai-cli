@@ -10,6 +10,7 @@ const commander = require('commander')
 const log = require('@fftai/dai-cli-log')
 const program = new commander.Command()
 const start = require('@fftai/dai-cli-command-start')
+const done = require('@fftai/dai-cli-command-done')
 const pause = require('@fftai/dai-cli-command-pause')
 const login = require('@fftai/dai-cli-command-login')
 const config = require('@fftai/dai-cli-command-config')
@@ -151,6 +152,7 @@ function registerCommand() {
     .addCommand(pause)
     .addCommand(login)
     .addCommand(config)
+    .addCommand(done)
 
   // 对未知命令的监听
   program.on('command:*', function (arg) {

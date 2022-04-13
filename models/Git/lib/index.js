@@ -4,6 +4,8 @@ const inquirer = require('inquirer')
 const { getConfig, GIT_BASE_BRANCH } = require('@fftai/dai-cli-util-config')
 const colors = require('colors/safe')
 
+const checkoutMessage = (str) => colors.bold(colors.cyan(str))
+
 class Git {
 
   constructor () {
@@ -20,7 +22,6 @@ class Git {
   }
 
   async checkoutTaskBranch (task, baseBranch) {
-    const checkoutMessage = (str) => colors.bold(colors.cyan(str))
     log.info(checkoutMessage('------正在自动切换至开发分支------'))
     // 1. 检查目标分支是否存在
     const isExist = await this.isBranchExist(task)
@@ -49,6 +50,11 @@ class Git {
     log.info(checkoutMessage('------自动切换至开发分支成功------'))
     
     log.success(`您当前在 ${colors.bold(colors.cyan(`${task}`))} ${colors.magenta('分支。')}`)
+  }
+
+  async prepareBaseBranch (baseBranch) {
+    log.info(checkoutMessage('------正在准备基础分支------'))
+    this.git.fetch(['origin', baseBranch])
   }
 
   async checkoutBranch (branchName, checkoutBaseBranch) {
