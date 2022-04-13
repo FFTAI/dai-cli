@@ -53,8 +53,13 @@ class Git {
   }
 
   async prepareBaseBranch (baseBranch) {
-    log.info(checkoutMessage('------正在准备基础分支------'))
-    this.git.fetch(['origin', baseBranch])
+    log.info(checkoutMessage('------正在下载基础分支------'))
+    await this.git.fetch(['origin', baseBranch])
+    log.success(checkoutMessage('------下载基础分支成功------'))
+  }
+
+  async mergeBranch (mergeBranch) {
+    log.info
   }
 
   async checkoutBranch (branchName, checkoutBaseBranch) {
