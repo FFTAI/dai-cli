@@ -38,11 +38,8 @@ class Git {
       // 1.3 更新基础分支
       await this.pullNewCode(checkoutBaseBranch)
       log.info(`更新基础分支完成, ${checkoutBaseBranch} 分支已和远程同步`)
-      // 1.4 检查是否有冲突s
-      const conflict = this.git.conflicts && this.git.conflicts.length > 0
-      if (conflict) {
-        log.error('出现冲突，请手动解决')
-      }
+      // 1.4 检查是否有冲突
+      checkoutConflict()
       log.info(`未发现冲突，开始切换到任务分支 ${task}`)
       // 1.5 创建并切换到目标分支
       await this.git.checkoutBranch(task, checkoutBaseBranch)
@@ -52,14 +49,35 @@ class Git {
     log.success(`您当前在 ${colors.bold(colors.cyan(`${task}`))} ${colors.magenta('分支。')}`)
   }
 
+  async checkoutConflict () {
+    const conflict = this.git.conflicts && this.git.conflicts.length > 0
+    if (conflict) {
+      log.error('出现冲突，请手动解决')
+    }
+  }
+
   async prepareBaseBranch (baseBranch) {
     log.info(checkoutMessage('------正在下载基础分支------'))
     await this.git.fetch(['origin', baseBranch])
     log.success(checkoutMessage('------下载基础分支成功------'))
   }
 
+  async getCurrentBranch () {
+    const branch = await this.git.branchLocal()
+    return branch.current
+  }
+
   async mergeBranch (mergeBranch) {
-    log.info
+    log.info(checkoutMessage('------正在合并分支------'))
+    await this.git.merge([mergeBranch])
+    log.info(checkoutMessage('------合并分支成功------'))
+  }
+
+  async pushBranchWithSameName (branchName) {
+    log.info(checkoutMessage(`------正在推送${branchName}分支------`))
+    await this.git.push(['origin', `${branchName}:${branchName}`])
+    log.info(checkoutMessage(`------推送${branchName}分支成功------`))
+
   }
 
   async checkoutBranch (branchName, checkoutBaseBranch) {
