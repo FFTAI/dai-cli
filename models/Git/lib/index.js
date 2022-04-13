@@ -49,7 +49,7 @@ class Git {
     log.success(`您当前在 ${colors.bold(colors.cyan(`${task}`))} ${colors.magenta('分支。')}`)
   }
 
-  async getBaseBranch (baseBranch) {
+  getBaseBranch (baseBranch) {
     return baseBranch || getConfig(GIT_BASE_BRANCH) || 'master'
   }
 
