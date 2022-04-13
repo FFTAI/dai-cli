@@ -25,8 +25,8 @@
   "dependencies": {
     "@fftai/dai-cli-command-config": "file:../../commands/config",
     "@fftai/dai-cli-command-login": "file:../../commands/login",
-    "@fftai/dai-cli-command-start": "file:../../commands/start",
     "@fftai/dai-cli-command-pause": "file:../../commands/pause",
+    "@fftai/dai-cli-command-start": "file:../../commands/start",
     "@fftai/dai-cli-get-npm-info": "file:../../utils/get-npm-info",
     "@fftai/dai-cli-log": "file:../../utils/log",
     "@fftai/dai-cli-util-config": "file:../../utils/config",
