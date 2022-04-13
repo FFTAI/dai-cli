@@ -63,6 +63,7 @@ class Git {
   async prepareBaseBranch (baseBranch) {
     log.info(checkoutMessage('------正在下载基础分支------'))
     const _baseBranch = this.getBaseBranch(baseBranch)
+    log.verbose(_baseBranch, '_baseBranch')
     await this.git.fetch(['origin', _baseBranch])
     log.success(checkoutMessage('------下载基础分支成功------'))
     return _baseBranch
