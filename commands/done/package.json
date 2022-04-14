@@ -21,6 +21,7 @@
     "@fftai/dai-cli-log": "file:../../utils/log",
     "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
     "@fftai/dai-cli-util-config": "file:../../utils/config",
+    "@fftai/dai-cli-models-gitea": "file:../../models/Gitea",
     "colors": "^1.4.0",
     "commander": "^9.0.0",
     "inquirer": "^8.2.0",

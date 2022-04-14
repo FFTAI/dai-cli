@@ -4,15 +4,23 @@ const pathExists = require('path-exists').sync
 const log = require('@fftai/dai-cli-log')
 const inquirer = require('inquirer')
 const constant = require('./contant')
+const path = require('path')
+const userHome = require('user-home')
 
 const ZENTAO_REQUEST_URL = 'ZENTAO_REQUEST_URL'
 const ZENTAO_SESSION_ID = 'ZENTAO_SESSION_ID'
+const GITEA_REQUEST_URL = 'GITEA_REQUEST_URL'
+const GITEA_USER_TOKEN = 'GITEA_USER_TOKEN'
+const GITEA_USER_NAME = 'GITEA_USER_NAME'
 const GIT_BASE_BRANCH = 'GIT_BASE_BRANCH'
 
 const configList = [
   ZENTAO_REQUEST_URL,
   ZENTAO_SESSION_ID,
-  GIT_BASE_BRANCH
+  GITEA_REQUEST_URL,
+  GITEA_USER_TOKEN,
+  GITEA_USER_NAME,
+  GIT_BASE_BRANCH,
 ]
 
 function listConfig () {
@@ -64,12 +72,26 @@ function getConfig (name) {
   return config
 }
 
+function createDefaultConfig () {
+  process.env.CLI_HOME_PATH = path.join(
+    userHome,
+    process.env.CLI_HOME ? process.env.CLI_HOME : constant.DEFAULT_CLI_HOME
+  )
+  configList.forEach(key => {
+    process.env[key] = path.join(userHome, '.' + key.toLocaleLowerCase().replace(/_/g, '.'))
+  })
+}
+
 module.exports = {
   constant,
+  GITEA_REQUEST_URL,
+  GITEA_USER_TOKEN,
+  GITEA_USER_NAME,
   ZENTAO_REQUEST_URL,
   ZENTAO_SESSION_ID,
   GIT_BASE_BRANCH,
   configList,
+  createDefaultConfig,
   listConfig,
   setConfig,
   validateConfigName,

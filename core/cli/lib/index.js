@@ -14,7 +14,7 @@ const done = require('@fftai/dai-cli-command-done')
 const pause = require('@fftai/dai-cli-command-pause')
 const login = require('@fftai/dai-cli-command-login')
 const config = require('@fftai/dai-cli-command-config')
-const { constant: { PATH_ZENTAO_REQUEST_URL, PATH_ZENTAO_SESSION_ID, PATH_GIT_BASE_BRANCH, LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } } = require('@fftai/dai-cli-util-config')
+const { constant: { LOWEST_NODE_VERSION }, createDefaultConfig } = require('@fftai/dai-cli-util-config')
 
 const pkg = require('../package.json')
 
@@ -34,20 +34,20 @@ async function core() {
 }
 
 async function prepare() {
-    // 检查当前版本是否为最新
-    checkGlobalUpdate()
-    // 输出版本号
-    // checkPkgVersion()
-    // 检查node版本
-    checkNodeVersion()
-    // 检查是否为root，如果是root需要进行降权。因为root创建的文件普通用户不可读不可写
-    checkRoot()
-    // 检查用户主目录
-    checkUserHome()
-    // 检查入参
-    checkInputArgs()
-    // 检查环境变量
-    checkENV()
+  // 检查当前版本是否为最新
+  checkGlobalUpdate()
+  // 输出版本号
+  // checkPkgVersion()
+  // 检查node版本
+  checkNodeVersion()
+  // 检查是否为root，如果是root需要进行降权。因为root创建的文件普通用户不可读不可写
+  checkRoot()
+  // 检查用户主目录
+  checkUserHome()
+  // 检查入参
+  checkInputArgs()
+  // 检查环境变量
+  checkENV()
 }
 
 function checkPkgVersion() {
@@ -59,25 +59,6 @@ function checkNodeVersion () {
   if (semver.gt(LOWEST_NODE_VERSION, nodeVersion)) {
     throw new Error(`当前node版本为 ${nodeVersion}，请升级至 v${LOWEST_NODE_VERSION} 以上版本`)
   }
-}
-
-function createDefaultConfig() {
-  process.env.CLI_HOME_PATH = path.join(
-    userHome,
-    process.env.CLI_HOME ? process.env.CLI_HOME : DEFAULT_CLI_HOME
-  )
-  process.env.ZENTAO_REQUEST_URL = path.join(
-    userHome,
-    PATH_ZENTAO_REQUEST_URL
-  )
-  process.env.ZENTAO_SESSION_ID = path.join(
-    userHome,
-    PATH_ZENTAO_SESSION_ID
-  )
-  process.env.GIT_BASE_BRANCH = path.join(
-    userHome,
-    PATH_GIT_BASE_BRANCH
-  )
 }
 
 function checkRoot() {

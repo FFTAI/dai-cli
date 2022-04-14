@@ -3,6 +3,7 @@ const program = new commander.Command()
 const log = require('@fftai/dai-cli-log')
 const Git = require('@fftai/dai-cli-git')
 const ZenTao = require('@fftai/dai-cli-models-zentao')
+const Gitea = require('@fftai/dai-cli-models-gitea')
 const inquirer = require('inquirer')
 const colors = require('colors/safe')
 const terminalLink = require('terminal-link')
@@ -43,6 +44,9 @@ async function prepare ({ yes, base }) {
   await git.mergeBranch(baseBranch)
   // 6. push代码
   await git.pushBranchWithSameName(name)
+  // 7. gitea merge request
+  const gitea = new Gitea()
+  await gitea.init()
 }
 
 async function chooseDoneTask (tasks) {

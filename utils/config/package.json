@@ -25,7 +25,8 @@
     "@fftai/dai-cli-log": "file:../../utils/log",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.2.0",
-    "path-exists": "^4.0.0"
+    "path-exists": "^4.0.0",
+    "user-home": "^3.0.0"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
