@@ -101,14 +101,11 @@ class Gitea {
     const url = `${this.requestUrl}api/v1/repos/${repo}/pulls?access_token=${this.token}`
     log.verbose('url', url)
     const { data } = await axios.post(url, {
-      assignee: this.name,
       base: baseBranch,
-      due_date: dayjs().format(),
       head: currentBranch,
       title,
-      milestone: 0
     })
-    log.info('data', data)
+    log.verbose('data', data)
     return data
   }
   

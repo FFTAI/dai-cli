@@ -50,8 +50,9 @@ async function prepare ({ yes, base }) {
   const title = await getTaskTitle(name)
   log.verbose('title', title)
   const repo = await git.getRepoInfo(['get-url', 'origin'])
-  log.info('repo', repo)
+  log.verbose('repo', repo)
   try {
+    log.info('正在创建合并请求...')
     await gitea.createPullRequest({
       repo,
       baseBranch,
