@@ -46,9 +46,9 @@ class Gitea {
   }
 
   async checkName () {
-    const name = getConfig(GITEA_USER_NAME)
+    let name = getConfig(GITEA_USER_NAME)
     if (!name) {
-      const { name } = await inquirer.prompt({
+      const result = await inquirer.prompt({
         type: 'input',
         name: 'name',
         message: '请输入Gitea用户名',
@@ -64,15 +64,16 @@ class Gitea {
         }
       })
     }
+    name = result.name
     this.name = name
     setConfig(GITEA_USER_NAME, name)
   }
 
   async checkToken () {
-    const token = getConfig(GITEA_USER_TOKEN)
+    let token = getConfig(GITEA_USER_TOKEN)
     if (!token) {
       log.warn(`Gitea token 未设置`)
-      const { token } = await inquirer.prompt({
+      const result = await inquirer.prompt({
         type: 'input',
         name: 'token',
         message: '请输入Gitea token, 可以在 设置 -> 应用 -> 管理Access Tokens 生成你的 token',
@@ -88,6 +89,7 @@ class Gitea {
         }
       })
     }
+    token = result.token
     this.token = token
     log.verbose(GITEA_USER_TOKEN, token)
     setConfig(GITEA_USER_TOKEN, token)
