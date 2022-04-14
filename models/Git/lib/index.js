@@ -80,6 +80,7 @@ class Git {
 
   async getRepoInfo () {
     const url = await this.git.raw(['remote', 'get-url', 'origin'])
+    log.verbose('url', url)
     return url.splice('/').slice(-2).join('/')
   }
 
