@@ -46,7 +46,7 @@ class Gitea {
   }
 
   async checkName () {
-    const name = getConfig(GITEA_USER_TOKEN)
+    const name = getConfig(GITEA_USER_NAME)
     if (!name) {
       const { name } = await inquirer.prompt({
         type: 'input',
