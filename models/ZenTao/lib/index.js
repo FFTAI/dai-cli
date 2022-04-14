@@ -105,6 +105,7 @@ class ZenTao {
   async getTaskInfo (taskId) {
     try {
       const res = await axios.get(`${this.requestUrl}task-view-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`)
+      log.info('res', res.data)
       if (res.data && res.data.data) {
         log.verbose('data', JSON.parse(res.data.data))
         return JSON.parse(res.data.data)
