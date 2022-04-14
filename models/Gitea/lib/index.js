@@ -78,10 +78,12 @@ class Gitea {
   }
 
   async setName (name) {
+    this.name = name
     setConfig(GITEA_USER_NAME, name)
   }
 
   async setToken (token) {
+    this.token = token
     setConfig(GITEA_USER_TOKEN, token)
   }
 
