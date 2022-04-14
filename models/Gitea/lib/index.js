@@ -13,13 +13,13 @@ async function checkRequestUrl () {
     const { requestUrl } = await inquirer.prompt({
       type: 'input',
       name: 'requestUrl',
-      message: '请输入蝉道地址，格式：http://127.0.0.1:88/',
+      message: '请输入 Gitea 地址，格式：http://127.0.0.1:88/',
       default: '',
       validate: function (input)  {
         const done = this.async();
         setTimeout(function () {
           if (!input) {
-            done(`请输入蝉道地址`);
+            done(`请输入 Gitea 地址`);
           }
           done(null, true);
         }, 0);

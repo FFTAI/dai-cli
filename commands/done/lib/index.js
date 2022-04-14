@@ -47,10 +47,10 @@ async function prepare ({ yes, base }) {
   // 7. gitea merge request
   const gitea = new Gitea()
   await gitea.init()
-  await this.getTaskName()
+  await getTaskTitle(name)
 }
 
-async function getTaskName (tasks) {
+async function getTaskTitle (name) {
   const zentao = new ZenTao()
   await zentao.init()
   const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
