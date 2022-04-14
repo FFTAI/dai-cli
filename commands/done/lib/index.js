@@ -43,7 +43,7 @@ async function prepare ({ yes, base }) {
   // 5. 合并分支
   await git.mergeBranch(baseBranch)
   // 6. push代码
-  // await git.pushBranchWithSameName(name)
+  await git.pushBranchWithSameName(name)
   // 7. gitea merge request
   const gitea = new Gitea()
   await gitea.init()
@@ -51,12 +51,17 @@ async function prepare ({ yes, base }) {
   log.verbose('title', title)
   const repo = await git.getRepoInfo(['get-url', 'origin'])
   log.info('repo', repo)
-  // try {
-  //   await gitea.createPullRequest(title, name, baseBranch)
-  // } catch (err) {
-  //   log.error('创建合并请求失败，请手动创建')
-  // }
-  // log.success('创建合并请求成功！')
+  try {
+    await gitea.createPullRequest({
+      repo,
+      baseBranch,
+      title,
+      currentBranch: name
+    })
+  } catch (err) {
+    log.error('创建合并请求失败，请手动创建')
+  }
+  log.success('创建合并请求成功！')
 }
 
 async function getTaskTitle (name) {

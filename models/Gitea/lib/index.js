@@ -100,8 +100,15 @@ class Gitea {
     this.requestUrl = getConfig(GITEA_REQUEST_URL)
   }
 
-  async createPullRequest () {
-    // axios.post(`${this.requestUrl}repos/v1/repos/fftai/dai-cli/pulls`)
+  async createPullRequest ({ repo, baseBranch, title, currentBranch }) {
+    return axios.post(`${this.requestUrl}repos/${repo}/pulls`, {
+      assignee: this.name,
+      base: baseBranch,
+      due_date: dayjs().format(),
+      head: currentBranch,
+      title,
+      milestone: 0
+    })
   }
   
 }
