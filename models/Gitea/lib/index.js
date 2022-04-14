@@ -63,8 +63,8 @@ class Gitea {
           }, 0);
         }
       })
+      name = result.name
     }
-    name = result.name
     this.name = name
     setConfig(GITEA_USER_NAME, name)
   }
@@ -88,8 +88,8 @@ class Gitea {
           }, 0);
         }
       })
+      token = result.token
     }
-    token = result.token
     this.token = token
     log.verbose(GITEA_USER_TOKEN, token)
     setConfig(GITEA_USER_TOKEN, token)
