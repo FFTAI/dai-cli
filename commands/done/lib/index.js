@@ -52,7 +52,7 @@ async function prepare ({ yes, base }) {
   const repo = await git.getRepoInfo(['get-url', 'origin'])
   log.verbose('repo', repo)
   try {
-    log.info('正在创建合并请求...')
+    log.info('正在创建合并请求，需要花一些时间，请稍候...')
     await gitea.createPullRequest({
       repo,
       baseBranch,
