@@ -37,8 +37,14 @@ class Gitea {
   }
 
   async init () {
-    if (!this.name) {
-      log.warn(`Gitea用户名未设置`)
+    await this.checkName()
+    await this.checkToken()
+    await this.checkRequestUrl()
+  }
+
+  async checkName () {
+    const name = getConfig(GITEA_USER_TOKEN)
+    if (!name) {
       const { name } = await inquirer.prompt({
         type: 'input',
         name: 'name',
@@ -54,9 +60,14 @@ class Gitea {
           }, 0);
         }
       })
-      await this.setName(name)
     }
-    if (!this.token) {
+    this.name = name
+    setConfig(GITEA_USER_NAME, name)
+  }
+
+  async checkToken () {
+    const token = getConfig(GITEA_USER_TOKEN)
+    if (!token) {
       log.warn(`Gitea token 未设置`)
       const { token } = await inquirer.prompt({
         type: 'input',
@@ -73,17 +84,7 @@ class Gitea {
           }, 0);
         }
       })
-      await this.setToken(token)
     }
-    await this.checkRequestUrl()
-  }
-
-  async setName (name) {
-    this.name = name
-    setConfig(GITEA_USER_NAME, name)
-  }
-
-  async setToken (token) {
     this.token = token
     setConfig(GITEA_USER_TOKEN, token)
   }
