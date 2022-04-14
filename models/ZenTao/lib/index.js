@@ -106,6 +106,15 @@ class ZenTao {
     try {
       const res = await axios.get(`${this.requestUrl}task-view-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`)
       log.info('res', res.data)
+      if (typeof res.data === 'string') {
+        if (res.data.includes('/user-login')) {
+          log.info('登录已过期，请重新登录')
+          await this.preLogin()
+          const list = await this.getMyTaskList()
+          log.verbose('MyTaskList', list.data)
+          return list
+        }
+      }
       if (res.data && res.data.data) {
         log.verbose('data', JSON.parse(res.data.data))
         return JSON.parse(res.data.data)
