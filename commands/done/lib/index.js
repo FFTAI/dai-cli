@@ -47,15 +47,41 @@ async function prepare ({ yes, base }) {
   // 7. gitea merge request
   const gitea = new Gitea()
   await gitea.init()
-  await getTaskTitle(name)
+  const title = await getTaskTitle(name)
 }
 
 async function getTaskTitle (name) {
+  async function getInputTitle () {
+    const { title } = await inquirer.prompt({
+      type: 'input',
+      name: 'title',
+      message: '从蝉道获取Title失败，请手动输入Title',
+      default: '',
+      validate: function (input)  {
+        const done = this.async();
+        setTimeout(function () {
+          if (!input) {
+            done(`手动输入Title`);
+          }
+          done(null, true);
+        }, 0);
+      }
+    })
+    return title
+  }
   const zentao = new ZenTao()
   await zentao.init()
   log.verbose('name', name)
-  const task = await zentao.getTaskInfo(ZenTao.getIdByName(name))
-  log.info(task.title)
+  try {
+    const task = await zentao.getTaskInfo(ZenTao.getIdByName(name))
+    if (task.title) {
+      return task.title
+    } else {
+      return await getInputTitle()
+    }
+  } catch (err) {
+    return await getInputTitle()
+  }
 }
 
 module.exports = initDoneCommand()
