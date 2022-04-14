@@ -89,6 +89,7 @@ class Gitea {
       })
     }
     this.token = token
+    log.verbose(GITEA_USER_TOKEN, token)
     setConfig(GITEA_USER_TOKEN, token)
   }
 
