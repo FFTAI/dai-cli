@@ -80,7 +80,7 @@ class Git {
 
   async getRepoInfo () {
     const url = await this.git.raw(['remote', 'get-url', 'origin'])
-    return url.split('/').slice(-2).join('/')
+    return url.replace('.git', '').split('/').slice(-2).join('/')
   }
 
   async getCurrentBranch () {
