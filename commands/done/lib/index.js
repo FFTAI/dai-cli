@@ -48,6 +48,7 @@ async function prepare ({ yes, base }) {
   const gitea = new Gitea()
   await gitea.init()
   const title = await getTaskTitle(name)
+  log.verbose('title', title)
 }
 
 async function getTaskTitle (name) {

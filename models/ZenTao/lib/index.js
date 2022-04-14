@@ -105,7 +105,6 @@ class ZenTao {
   async getTaskInfo (taskId) {
     try {
       const res = await axios.get(`${this.requestUrl}task-view-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`)
-      log.info('res', res.data)
       if (typeof res.data === 'string') {
         if (res.data.includes('/user-login')) {
           log.info('登录已过期，请重新登录')
