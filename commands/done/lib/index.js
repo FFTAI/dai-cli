@@ -48,7 +48,7 @@ async function prepare ({ yes, base }) {
   const gitea = new Gitea()
   await gitea.init()
   const title = await getTaskTitle(name)
-  const repo = await git.remote(['get-url', 'origin'])
+  const repo = await git.getRepoInfo(['get-url', 'origin'])
   log.info('repo', repo)
   log.verbose('title', title)
   try {

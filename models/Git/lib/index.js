@@ -78,6 +78,10 @@ class Git {
     return _baseBranch
   }
 
+  async getRepoInfo () {
+    return await this.git.raw(['remote', 'get-url', 'origin'])
+  }
+
   async getCurrentBranch () {
     const branch = await this.git.branchLocal()
     return branch.current
