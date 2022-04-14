@@ -53,6 +53,7 @@ async function prepare ({ yes, base }) {
 async function getTaskTitle (name) {
   const zentao = new ZenTao()
   await zentao.init()
+  log.verbose('name', name)
   const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
   log.info(task)
 }
