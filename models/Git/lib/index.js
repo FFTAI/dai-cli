@@ -39,7 +39,7 @@ class Git {
       await this.pullNewCode(checkoutBaseBranch)
       log.info(`更新基础分支完成, ${checkoutBaseBranch} 分支已和远程同步`)
       // 1.4 检查是否有冲突
-      checkoutConflict()
+      await this.checkoutConflict()
       log.info(`未发现冲突，开始切换到任务分支 ${task}`)
       // 1.5 创建并切换到目标分支
       await this.git.checkoutBranch(task, checkoutBaseBranch)
@@ -54,18 +54,27 @@ class Git {
   }
 
   async checkoutConflict () {
-    const conflict = this.git.conflicts && this.git.conflicts.length > 0
+    const diff = await this.git.diff(['--check'])
+    const conflict = (this.git.conflicts && this.git.conflicts.length > 0) || (diff && diff.length > 0)
+    log.verbose('git', this.git.conflicts)
+    log.verbose('conflict', this.git.conflicts)
     if (conflict) {
-      log.error('出现冲突，请手动解决')
+      if (diff && diff.length) {
+        log.info('diff', diff)
+      }
+      if (this.git.conflicts && this.git.conflicts.length) {
+        log.info(this.git.conflicts)
+      }
+      throw new Error('出现冲突，请手动解决')
     }
   }
 
   async prepareBaseBranch (baseBranch) {
-    log.info(checkoutMessage('------正在下载基础分支------'))
+    log.info('正在下载基础分支...')
     const _baseBranch = this.getBaseBranch(baseBranch)
     log.verbose(_baseBranch, '_baseBranch')
     await this.git.fetch(['origin', _baseBranch])
-    log.success(checkoutMessage('------下载基础分支成功------'))
+    log.success('下载基础分支成功!')
     return _baseBranch
   }
 
@@ -75,16 +84,19 @@ class Git {
   }
 
   async mergeBranch (mergeBranch) {
-    log.info(checkoutMessage('------正在合并分支------'))
-    await this.git.merge([mergeBranch])
-    log.info(checkoutMessage('------合并分支成功------'))
+    log.info('正在合并分支...')
+    await this.checkoutConflict()
+    const currentBranch = await this.getCurrentBranch()
+    log.verbose('mergeBranch', mergeBranch)
+    log.verbose('currentBranch', currentBranch)
+    await this.git.mergeFromTo(`origin/${mergeBranch}`, currentBranch)
+    log.info('合并分支成功!')
   }
 
   async pushBranchWithSameName (branchName) {
-    log.info(checkoutMessage(`------正在推送${branchName}分支------`))
+    log.info(`正在推送 ${colors.cyan(branchName)} 分支...`)
     await this.git.push(['origin', `${branchName}:${branchName}`])
-    log.info(checkoutMessage(`------推送${branchName}分支成功------`))
-
+    log.info(`推送 ${colors.cyan(branchName)} 分支成功!`)
   }
 
   async checkoutBranch (branchName, checkoutBaseBranch) {
@@ -122,6 +134,7 @@ class Git {
   }
 
   async checkChanges (yes) {
+    await this.checkoutConflict()
     const changes = await this.git.status()
     if (changes.files.length > 0) {
       let confirm = false
