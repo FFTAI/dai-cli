@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli-command-done",
-  "version": "0.2.17",
+  "version": "0.3.0",
   "description": "> TODO: description",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
@@ -19,9 +19,9 @@
   "dependencies": {
     "@fftai/dai-cli-git": "file:../../models/Git",
     "@fftai/dai-cli-log": "file:../../utils/log",
+    "@fftai/dai-cli-models-gitea": "file:../../models/Gitea",
     "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
     "@fftai/dai-cli-util-config": "file:../../utils/config",
-    "@fftai/dai-cli-models-gitea": "file:../../models/Gitea",
     "colors": "^1.4.0",
     "commander": "^9.0.0",
     "inquirer": "^8.2.0",
