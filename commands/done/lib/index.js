@@ -59,7 +59,9 @@ async function prepare ({ yes, base }) {
       currentBranch: name
     })
   } catch (err) {
+    log.error(err)
     log.error('创建合并请求失败，请手动创建')
+    return
   }
   log.success('创建合并请求成功！')
 }
