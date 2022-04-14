@@ -101,7 +101,7 @@ class Gitea {
   }
 
   async createPullRequest ({ repo, baseBranch, title, currentBranch }) {
-    return axios.post(`${this.requestUrl}repos/${repo}/pulls`, {
+    const { data } = await axios.post(`${this.requestUrl}repos/${repo}/pulls`, {
       assignee: this.name,
       base: baseBranch,
       due_date: dayjs().format(),
@@ -109,6 +109,8 @@ class Gitea {
       title,
       milestone: 0
     })
+    log.info('data', data)
+    return data
   }
   
 }
