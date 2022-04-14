@@ -99,6 +99,10 @@ class Gitea {
     await checkRequestUrl()
     this.requestUrl = getConfig(GITEA_REQUEST_URL)
   }
+
+  async createPullRequest () {
+    // axios.post(`${this.requestUrl}repos/v1/repos/fftai/dai-cli/pulls`)
+  }
   
 }
 

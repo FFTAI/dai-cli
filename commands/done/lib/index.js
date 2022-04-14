@@ -7,7 +7,7 @@ const Gitea = require('@fftai/dai-cli-models-gitea')
 const inquirer = require('inquirer')
 const colors = require('colors/safe')
 const terminalLink = require('terminal-link')
-const { getConfig, ZENTAO_REQUEST_URL } = require('@fftai/dai-cli-util-config')
+const { getConfig, ZENTAO_REQUEST_URL, listConfig } = require('@fftai/dai-cli-util-config')
 
 function initDoneCommand () {
   return program
@@ -48,7 +48,15 @@ async function prepare ({ yes, base }) {
   const gitea = new Gitea()
   await gitea.init()
   const title = await getTaskTitle(name)
+  const repo = await git.remote(['get-url', 'origin'])
+  log.info('repo', repo)
   log.verbose('title', title)
+  try {
+    await gitea.createPullRequest(title, name, baseBranch)
+  } catch (err) {
+    log.error('创建合并请求失败，请手动创建')
+  }
+  log.success('创建合并请求成功！')
 }
 
 async function getTaskTitle (name) {
