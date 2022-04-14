@@ -75,6 +75,7 @@ class Gitea {
       })
       await this.setToken(token)
     }
+    await this.checkRequestUrl()
   }
 
   async setName (name) {
