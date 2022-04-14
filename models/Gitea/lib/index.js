@@ -1,5 +1,4 @@
 const log = require('@fftai/dai-cli-log')
-const FormData = require('form-data')
 const { setConfig, getConfig, GITEA_USER_TOKEN, GITEA_USER_NAME, GITEA_REQUEST_URL } = require('@fftai/dai-cli-util-config')
 const axios = require('axios')
 const inquirer = require('inquirer')
@@ -62,13 +61,13 @@ class Gitea {
       const { token } = await inquirer.prompt({
         type: 'input',
         name: 'name',
-        message: '请输入Gitea token',
+        message: '请输入Gitea token, 可以在 设置 -> 应用 -> 管理Access Tokens 生成你的 token',
         default: '',
         validate: function (input)  {
           const done = this.async();
           setTimeout(function () {
             if (!input) {
-              done(`请输入Gitea token, 可以在 设置 -> 应用 -> 管理Access Tokens 生成你的 token`);
+              done(`请输入Gitea token`);
             }
             done(null, true);
           }, 0);
