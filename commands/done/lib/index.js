@@ -55,7 +55,7 @@ async function getTaskTitle (name) {
   await zentao.init()
   log.verbose('name', name)
   const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
-  log.info(task)
+  log.info(task.title)
 }
 
 module.exports = initDoneCommand()
