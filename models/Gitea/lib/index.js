@@ -74,7 +74,7 @@ class Gitea {
       log.warn(`Gitea token 未设置`)
       const { token } = await inquirer.prompt({
         type: 'input',
-        name: 'name',
+        name: 'token',
         message: '请输入Gitea token, 可以在 设置 -> 应用 -> 管理Access Tokens 生成你的 token',
         default: '',
         validate: function (input)  {
