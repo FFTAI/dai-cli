@@ -37,8 +37,11 @@ class Gitea {
   }
 
   async init () {
+    console.log(1)
     await this.checkName()
+    console.log(1)
     await this.checkToken()
+    console.log(1)
     await this.checkRequestUrl()
   }
 
