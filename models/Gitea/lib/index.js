@@ -1,6 +1,6 @@
 const log = require('@fftai/dai-cli-log')
 const FormData = require('form-data')
-const { setConfig, getConfig, GITEA_USER_TOKEN, GITEA_USER_NAME } = require('@fftai/dai-cli-util-config')
+const { setConfig, getConfig, GITEA_USER_TOKEN, GITEA_USER_NAME, GITEA_REQUEST_URL } = require('@fftai/dai-cli-util-config')
 const axios = require('axios')
 const inquirer = require('inquirer')
 const { getBaseInfo } = require('@fftai/dai-cli-util')
