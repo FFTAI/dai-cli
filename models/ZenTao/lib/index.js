@@ -110,9 +110,7 @@ class ZenTao {
         if (res.data.includes('/user-login')) {
           log.info('登录已过期，请重新登录')
           await this.preLogin()
-          const list = await this.getMyTaskList()
-          log.verbose('MyTaskList', list.data)
-          return list
+          return await this.getTaskInfo(taskId)
         }
       }
       if (res.data && res.data.data) {
