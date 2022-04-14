@@ -43,7 +43,7 @@ async function prepare ({ yes, base }) {
   // 5. 合并分支
   await git.mergeBranch(baseBranch)
   // 6. push代码
-  await git.pushBranchWithSameName(name)
+  // await git.pushBranchWithSameName(name)
   // 7. gitea merge request
   const gitea = new Gitea()
   await gitea.init()
