@@ -43,7 +43,9 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
       log.verbose('tasks', tasks)
       const task = await chooseStartTask(tasks)
       const action = task.status === 'pause' ? 'restart' : 'start'
-      await checkoutDevBranch(`T#${task.id}`, { yes, base })
+      if (!skipGitControl) {
+        await checkoutDevBranch(`T#${task.id}`, { yes, base })
+      }
       await zentao.startTask(task.id, { time, comment, action })
     }
   }

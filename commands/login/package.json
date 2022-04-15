@@ -26,6 +26,7 @@
   "dependencies": {
     "@fftai/dai-cli-log": "file:../../utils/log",
     "@fftai/dai-cli-models-zentao": "file:../../models/ZenTao",
+    "@fftai/dai-cli-models-gitea": "file:../../models/Gitea",
     "@fftai/dai-cli-util": "file:../../utils/util",
     "commander": "^9.0.0",
     "inquirer": "^8.2.0"

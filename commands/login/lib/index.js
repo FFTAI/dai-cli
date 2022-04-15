@@ -2,6 +2,7 @@ const inquirer = require('inquirer')
 const { getBaseInfo } = require('@fftai/dai-cli-util')
 const log = require('@fftai/dai-cli-log')
 const ZenTao = require('@fftai/dai-cli-models-zentao')
+const Gitea = require('@fftai/dai-cli-models-gitea')
 const commander = require('commander')
 
 const program = new commander.Command()
@@ -35,8 +36,11 @@ function initLoginCommand () {
 async function loginAction (inputSystem) {
   let system = inputSystem
 
+  
   if (system === 'gitea') {
-    log.info('开发中...')
+    const gitea = new Gitea()
+    await gitea.init()
+    log.success('登录成功！')
     return
   }
 
@@ -44,10 +48,10 @@ async function loginAction (inputSystem) {
     const result = await inquirer.prompt(systemPrompt)
     system = result.system
   }
-  const { account, password } = await getBaseInfo(inputSystem)
-  log.verbose(account)
-  log.verbose(password)
   if (system === 'zentao') {
+    const { account, password } = await getBaseInfo(inputSystem)
+    log.verbose(account)
+    log.verbose(password)
     await ZenTao.checkRequestUrl()
     log.verbose('login zentao')
     try {
@@ -56,9 +60,6 @@ async function loginAction (inputSystem) {
     } catch (err) {
       log.error(err)
     }
-  }
-  if (system === 'gitea') {
-    log.info('即将上线')
   }
 }
 

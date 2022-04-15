@@ -54,13 +54,13 @@ class Git {
   }
 
   async checkoutConflict () {
-    const diff = await this.git.diff(['--check'])
-    const conflict = (this.git.conflicts && this.git.conflicts.length > 0) || (diff && diff.length > 0)
+    let diff = await this.git.diff(['--check', '--ignore-all-space'])
+    const conflict = (this.git.conflicts && this.git.conflicts.length > 0) || (diff && diff.includes('conflict'))
     log.verbose('git', this.git.conflicts)
     log.verbose('conflict', this.git.conflicts)
     if (conflict) {
       if (diff && diff.length) {
-        log.info('diff', diff)
+        console.log('diff', diff)
       }
       if (this.git.conflicts && this.git.conflicts.length) {
         log.info(this.git.conflicts)
