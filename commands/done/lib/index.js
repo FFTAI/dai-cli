@@ -12,7 +12,7 @@ const { getConfig, ZENTAO_REQUEST_URL, listConfig } = require('@fftai/dai-cli-ut
 function initDoneCommand () {
   return program
     .command('done')
-    .option('-y, --yes', '同意所有自动操作')
+    .option('-y, --yes', '同意所有自动操作。[1. 自动把 stash 区的文件 pop 出来, 2. commit 所有文件]')
     .option('-b, --base <branchName>', '设置基础分支名称')
     .description('完成一个任务')
     .action(doneAction)
