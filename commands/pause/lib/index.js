@@ -11,7 +11,6 @@ const { getConfig, ZENTAO_REQUEST_URL } = require('@fftai/dai-cli-util-config')
 function initStartCommand () {
   return program
     .command('pause [name]')
-    .option('-l, --list', '列出所有可以暂停的任务')
     .option('-m, --comment <comment>', '任务备注')
     .description('暂停一个任务')
     .action(pauseAction)
@@ -19,15 +18,15 @@ function initStartCommand () {
 
 const { startsWith, statusMap, priorityMap } = ZenTao
 
-async function pauseAction (name, { list, comment }) {
+async function pauseAction (name, { comment }) {
   const zentao = new ZenTao()
   await zentao.init()
   if (name) {
     // 如果传入名字，则检查名字是否合法
     checkName(name)
     const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
-    if (task.status === 'pause') {
-      throw new Error('该任务已经处于暂停状态')
+    if (task.status !== 'doing') {
+      throw new Error('只允许暂停进行中的任务')
     } else {
       await zentao.pauseTask(ZenTao.getIdByName(name), { comment })
     }
