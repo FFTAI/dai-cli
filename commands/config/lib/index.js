@@ -27,7 +27,8 @@ function initConfigCommand () {
 
 function listAction (name) {
   if (name) {
-    getConfig(name)
+    const config = getConfig(name)
+    log.info(name, config)
   } else {
     listConfig()
   }

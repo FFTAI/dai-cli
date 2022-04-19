@@ -27,11 +27,13 @@ async function doneAction ({ yes, base }) {
 async function prepare ({ yes, base }) {
   const git = new Git()
   const name = await git.getCurrentBranch()
-  await inquirer.prompt({
-    type: 'confirm',
-    name: 'task',
-    message: `确认要提交 ${colors.cyan(name)} 分支的代码吗？`,
-  })
+  if (!yes) {
+    await inquirer.prompt({
+      type: 'confirm',
+      name: 'task',
+      message: `确认要提交 ${colors.cyan(name)} 分支的代码吗？`,
+    })
+  }
   log.verbose(name, 'name')
   // 1. 校验是否以T#或者B#开头
   ZenTao.checkName(name)
@@ -72,7 +74,7 @@ async function getTaskTitle (name) {
     const { title } = await inquirer.prompt({
       type: 'input',
       name: 'title',
-      message: '从蝉道获取Title失败，请手动输入Title',
+      message: '从蝉道获取 title 失败，请手动输入 title',
       default: '',
       validate: function (input)  {
         const done = this.async();

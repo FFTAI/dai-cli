@@ -26,7 +26,7 @@ async function pauseAction (name, { comment }) {
     checkName(name)
     const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
     if (task.status !== 'doing') {
-      throw new Error('只允许暂停进行中的任务')
+      throw new Error(`只允许暂停进行中的任务, 该任务的状态: ${ZenTao.statusMap[task.status]}`)
     } else {
       await zentao.pauseTask(ZenTao.getIdByName(name), { comment })
     }
