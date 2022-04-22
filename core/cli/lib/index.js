@@ -112,10 +112,12 @@ async function checkGlobalUpdate() {
   } = require('@fftai/dai-cli-get-npm-info')
   const lastVersion = await getNpmSemverVersion(currentVersion, pkgName)
   if (lastVersion && semver.gt(lastVersion, currentVersion)) {
-    log.notice(colors.yellow(`${pkgName} 最新版本已就绪`))
-    log.notice(colors.yellow(`当前版本：${currentVersion}`))
-    log.notice(colors.yellow(`最新版本：${lastVersion}`))
-    log.notice(`更新命令：npm install -g ${pkgName}`)
+    process.on('exit', () => {
+      log.notice(colors.yellow(`${pkgName} 最新版本已就绪`))
+      log.notice(colors.yellow(`当前版本：${currentVersion}`))
+      log.notice(colors.yellow(`最新版本：${lastVersion}`))
+      log.notice(`更新命令：npm install -g ${pkgName}`)
+    })
   }
 }
 
