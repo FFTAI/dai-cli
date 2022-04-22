@@ -37,9 +37,12 @@ async function prepare ({ yes, base }) {
   log.verbose(name, 'name')
   // 1. 校验是否以T#或者B#开头
   ZenTao.checkName(name)
+  // 1.1 获取任务标题
+  const title = await getTaskTitle(name)
+  log.verbose('title', title)
   // 2. 检查当前分支是否可以切出去
   // 3. commit代码等
-  await git.prepareBranch(yes)
+  await git.prepareBranch(yes, { defaultCommitMessage: title })
   // 4. 更新base
   const baseBranch = await git.prepareBaseBranch(base)
   // 5. 合并分支
@@ -49,8 +52,6 @@ async function prepare ({ yes, base }) {
   // 7. gitea merge request
   const gitea = new Gitea()
   await gitea.init()
-  const title = await getTaskTitle(name)
-  log.verbose('title', title)
   const repo = await git.getRepoInfo(['get-url', 'origin'])
   log.verbose('repo', repo)
   try {

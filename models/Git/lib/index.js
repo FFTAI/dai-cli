@@ -12,13 +12,13 @@ class Git {
     this.git = simpleGit(process.cwd())
   }
 
-  async prepareBranch (yes) {
+  async prepareBranch (yes, options) {
     log.verbose('prepareBranch~')
     // 1. 确保当前分支是否可以切出去
     // 1.1 确认stash区是否要pop
     await this.checkStash(yes)
     // 1.2 检查所有文件是否提交
-    await this.checkChanges(yes)
+    await this.checkChanges(yes, options)
   }
 
   async checkoutTaskBranch (task, baseBranch) {
@@ -138,7 +138,7 @@ class Git {
     }
   }
 
-  async checkChanges (yes) {
+  async checkChanges (yes, { defaultCommitMessage }) {
     await this.checkoutConflict()
     const changes = await this.git.status()
     if (changes.files.length > 0) {
@@ -156,7 +156,7 @@ class Git {
       }
       if (confirm || yes) {
         await this.git.add(['-A'])
-        const { commitMessage } = await inquirer.prompt({ type: 'input', name: 'commitMessage', message: '请输入commit信息', default: 'WIP' })
+        const { commitMessage } = await inquirer.prompt({ type: 'input', name: 'commitMessage', message: '请输入commit信息', default: defaultCommitMessage || 'WIP' })
         await this.git.commit(commitMessage)
         log.success('commit 成功')
       } else {
