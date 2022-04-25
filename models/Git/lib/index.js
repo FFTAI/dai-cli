@@ -138,7 +138,8 @@ class Git {
     }
   }
 
-  async checkChanges (yes, { defaultCommitMessage }) {
+  async checkChanges (yes, options) {
+    const { defaultCommitMessage } = options || {}
     await this.checkoutConflict()
     const changes = await this.git.status()
     if (changes.files.length > 0) {
