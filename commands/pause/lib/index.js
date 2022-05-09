@@ -1,7 +1,6 @@
 const commander = require('commander')
 const program = new commander.Command()
 const log = require('@fftai/dai-cli-log')
-const Git = require('@fftai/dai-cli-git')
 const ZenTao = require('@fftai/dai-cli-models-zentao')
 const inquirer = require('inquirer')
 const colors = require('colors/safe')
@@ -44,8 +43,8 @@ async function pauseAction (name, { comment }) {
 }
 
 async function choosePauseTask (tasks) {
-  tasksList = Object.keys(tasks).map(key => tasks[key])
-  doingTasksList = tasksList.filter(task => task.status === 'doing')
+  const tasksList = Object.keys(tasks).map(key => tasks[key])
+  const doingTasksList = tasksList.filter(task => task.status === 'doing')
   let choices = doingTasksList
   if (!choices || !choices.length) {
     throw new Error('当前没有任务可以暂停')

@@ -20,7 +20,7 @@ function initStartCommand () {
     .action(startAction)
 }
 
-const { startsWith, statusMap, priorityMap } = ZenTao
+const { statusMap, priorityMap } = ZenTao
 
 async function startAction (name, { yes, base, time, comment, skipGitControl }) {
   const zentao = new ZenTao()
@@ -62,9 +62,9 @@ async function checkoutDevBranch (name, { yes, base }) {
 }
 
 async function chooseStartTask (tasks) {
-  tasksList = Object.keys(tasks).map(key => tasks[key])
-  waitTasksList = tasksList.filter(task => task.status === 'wait')
-  pauseTasksList = tasksList.filter(task => task.status === 'pause')
+  const tasksList = Object.keys(tasks).map(key => tasks[key])
+  const waitTasksList = tasksList.filter(task => task.status === 'wait')
+  const pauseTasksList = tasksList.filter(task => task.status === 'pause')
   let choices = [...waitTasksList, ...pauseTasksList]
   if (!choices || !choices.length) {
     throw new Error('当前没有任务可以开始')

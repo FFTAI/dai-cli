@@ -6,13 +6,13 @@ const usernamePrompt = {
   message: '账号',
   default: '',
   validate: function (input)  {
-    const done = this.async();
+    const done = this.async()
     setTimeout(function () {
       if (!input) {
-        done(`请输入账号`);
+        done(`请输入账号`)
       }
-      done(null, true);
-    }, 0);
+      done(null, true)
+    }, 0)
   }
 }
 
@@ -22,13 +22,13 @@ const passwordPrompt = {
   message: '密码',
   default: '',
   validate: function (input)  {
-    const done = this.async();
+    const done = this.async()
     setTimeout(function () {
       if (!input) {
-        done(`请输入密码`);
+        done(`请输入密码`)
       }
-      done(null, true);
-    }, 0);
+      done(null, true)
+    }, 0)
   }
 }
 

@@ -6,8 +6,8 @@ const ZenTao = require('@fftai/dai-cli-models-zentao')
 const Gitea = require('@fftai/dai-cli-models-gitea')
 const inquirer = require('inquirer')
 const colors = require('colors/safe')
-const terminalLink = require('terminal-link')
-const { getConfig, ZENTAO_REQUEST_URL, listConfig } = require('@fftai/dai-cli-util-config')
+// const terminalLink = require('terminal-link')
+// const { getConfig, ZENTAO_REQUEST_URL, listConfig } = require('@fftai/dai-cli-util-config')
 
 function initDoneCommand () {
   return program
@@ -17,8 +17,6 @@ function initDoneCommand () {
     .description('完成一个任务')
     .action(doneAction)
 }
-
-const { donesWith, statusMap, priorityMap } = ZenTao
 
 async function doneAction ({ yes, base }) {
   prepare({ yes, base })
@@ -78,13 +76,13 @@ async function getTaskTitle (name) {
       message: '从蝉道获取 title 失败，请手动输入 title',
       default: '',
       validate: function (input)  {
-        const done = this.async();
+        const done = this.async()
         setTimeout(function () {
           if (!input) {
-            done(`手动输入Title`);
+            done(`手动输入Title`)
           }
-          done(null, true);
-        }, 0);
+          done(null, true)
+        }, 0)
       }
     })
     return title

@@ -1,35 +1,35 @@
-const fs = require('fs');
+const fs = require('fs')
 
-function writeFile(path, data, { rewrite = true } = {}) {
+function writeFile (path, data, { rewrite = true } = {}) {
   if (fs.existsSync(path)) {
     if (rewrite) {
-      fs.writeFileSync(path, data);
-      return true;
+      fs.writeFileSync(path, data)
+      return true
     } else {
-      return false;
+      return false
     }
   } else {
-    fs.writeFileSync(path, data);
-    return true;
+    fs.writeFileSync(path, data)
+    return true
   }
 }
 
-function readFile(path, options = {}) {
+function readFile (path, options = {}) {
   if (fs.existsSync(path)) {
-    const buffer = fs.readFileSync(path);
+    const buffer = fs.readFileSync(path)
     if (buffer) {
       if (options.toJson) {
-        return buffer.toJSON();
+        return buffer.toJSON()
       } else {
-        return buffer.toString();
+        return buffer.toString()
       }
     }
   } else {
-    return null;
+    return null
   }
 }
 
 module.exports = {
   readFile,
   writeFile,
-};
+}

@@ -1,4 +1,4 @@
-module.exports = core;
+module.exports = core
 
 // package
 const path = require('path')
@@ -18,9 +18,9 @@ const { constant: { LOWEST_NODE_VERSION }, createDefaultConfig } = require('@fft
 
 const pkg = require('../package.json')
 
-let args, envConfig;
+let args, envConfig
 
-async function core() {
+async function core () {
   try {
     await prepare()
     // 注册命令
@@ -33,7 +33,7 @@ async function core() {
   }
 }
 
-async function prepare() {
+async function prepare () {
   // 检查当前版本是否为最新
   checkGlobalUpdate()
   // 输出版本号
@@ -50,9 +50,9 @@ async function prepare() {
   checkENV()
 }
 
-function checkPkgVersion() {
-  log.info('cli', pkg.version)
-}
+// function checkPkgVersion () {
+//   log.info('cli', pkg.version)
+// }
 
 function checkNodeVersion () {
   const nodeVersion = process.version
@@ -61,18 +61,18 @@ function checkNodeVersion () {
   }
 }
 
-function checkRoot() {
+function checkRoot () {
   const rootCheck = require('root-check')
   rootCheck()
 }
 
-function checkUserHome() {
+function checkUserHome () {
   if (!userHome || !pathExists(userHome)) {
     throw new Error('当前用户主目录不存在！')
   }
 }
 
-function checkENV() {
+function checkENV () {
   const dotenv = require('dotenv')
   const dotenvPath = path.resolve(userHome, '.env')
   if (pathExists(dotenvPath)) {
@@ -102,7 +102,7 @@ function checkArgs () {
   log.level = process.env.LOG_LEVEL
 }
 
-async function checkGlobalUpdate() {
+async function checkGlobalUpdate () {
   // 获取当前版本号
   const currentVersion = pkg.version
   const pkgName = pkg.name
@@ -121,7 +121,7 @@ async function checkGlobalUpdate() {
   }
 }
 
-function registerCommand() {
+function registerCommand () {
   program
     .name(Object.keys(pkg.bin)[0])
     .version(pkg.version)
