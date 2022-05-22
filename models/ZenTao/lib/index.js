@@ -145,6 +145,20 @@ class ZenTao {
     }
   }
 
+  async getMyBugList () {
+    try {
+      const res = await this.request.get(`my-bug.json?zentaosid=${this.sid}`)
+      return JSON.parse(res.data.data).bugs
+    } catch (err) {
+      if (err.msg && err.msg === 'invalid session') {
+        await this.preLogin()
+        return await this.getMyBugList()
+      }
+      log.info('出错了！')
+      log.verbose(err)
+    }
+  }
+
   async getBugInfo (bugId) {
     try {
       const res = await axios.get(`${this.requestUrl}bug-view-${bugId}.json?zentaosid=${this.sid}&onlybody=yes`)
