@@ -25,16 +25,19 @@ const { statusMap, priorityMap } = ZenTao
 async function startAction (name, { yes, base, time, comment, skipGitControl }) {
   const zentao = new ZenTao()
   await zentao.init()
+  // BUG 只能通过直接输入bug号的方式开始
   if (name) {
     if (!skipGitControl) {
       await checkoutDevBranch(name, { yes, base })
     }
-    const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
-    if (task.status === 'doing') {
-      throw new Error('该任务已经处于进行中状态')
-    } else {
-      const action = task.status === 'pause' ? 'restart' : 'start'
-      await zentao.startTask(ZenTao.getIdByName(name), { time, comment, action })
+    if (name.startsWith('T#')) {
+      const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
+      if (task.status === 'doing') {
+        throw new Error('该任务已经处于进行中状态')
+      } else {
+        const action = task.status === 'pause' ? 'restart' : 'start'
+        await zentao.startTask(ZenTao.getIdByName(name), { time, comment, action })
+      }
     }
   } else {
     const tasks = await zentao.getMyTaskList()

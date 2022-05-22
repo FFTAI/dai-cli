@@ -127,7 +127,7 @@ class ZenTao {
         await this.preLogin()
         return await this.getTaskInfo(taskId)
       }
-      log.error('获取失败任务信息', err)
+      log.error('获取任务信息失败', err)
     }
   }
 
@@ -142,6 +142,22 @@ class ZenTao {
       }
       log.info('出错了！')
       log.verbose(err)
+    }
+  }
+
+  async getBugInfo (bugId) {
+    try {
+      const res = await axios.get(`${this.requestUrl}bug-view-${bugId}.json?zentaosid=${this.sid}&onlybody=yes`)
+      if (res.data && res.data.data) {
+        log.verbose('data', JSON.parse(res.data.data))
+        return JSON.parse(res.data.data)
+      }
+    } catch (err) {
+      if (err.msg && err.msg === 'invalid session') {
+        await this.preLogin()
+        return await this.getBugInfo(bugId)
+      }
+      log.error('获取BUG信息失败', err)
     }
   }
 
