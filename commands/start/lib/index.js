@@ -7,6 +7,7 @@ const inquirer = require('inquirer')
 const colors = require('colors/safe')
 const terminalLink = require('terminal-link')
 const { getConfig, ZENTAO_REQUEST_URL } = require('@fftai/dai-cli-util-config')
+const open = require('open')
 
 function initStartCommand () {
   return program
@@ -27,16 +28,35 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
   await zentao.init()
   // BUG 只能通过直接输入bug号的方式开始
   if (name) {
-    if (!skipGitControl) {
-      await checkoutDevBranch(name, { yes, base })
-    }
     if (name.startsWith('T#')) {
+      if (!skipGitControl) {
+        await checkoutDevBranch(name, { yes, base })
+      }
       const { task } = await zentao.getTaskInfo(ZenTao.getIdByName(name))
       if (task.status === 'doing') {
         throw new Error('该任务已经处于进行中状态')
       } else {
         const action = task.status === 'pause' ? 'restart' : 'start'
         await zentao.startTask(ZenTao.getIdByName(name), { time, comment, action })
+      }
+    } else if (name.startsWith('B#')) {
+      const data = await zentao.getBugInfo(ZenTao.getIdByName(name))
+      if (data && data.title) {
+        const { confirm } = await inquirer.prompt({
+          name: 'confirm',
+          type: 'confirm',
+          message: `开始修复 ${colors.cyan(data.title)}，是否打开 BUG 详情？`,
+          default: true,
+        })
+        if (confirm) {
+          open(`http://112.64.126.27:81/zentao/bug-view-${ZenTao.getIdByName(name)}.html`)
+        }
+
+        if (!skipGitControl) {
+          await checkoutDevBranch(name, { yes, base })
+        }
+      } else {
+        log.info('没有在蝉道上查询到该bug，请确认是否是正确的bug号')
       }
     }
   } else {
