@@ -53,6 +53,19 @@ class ZenTao {
     if (!this.sid) {
       await this.preLogin()
     }
+    this.request = axios.create({
+      baseURL: this.requestUrl,
+      timeout: 1000 * 30
+    })
+    this.request.interceptors.response.use(res => {
+      if (typeof res.data === 'string') {
+        if (res.data.includes('/user-login')) {
+          log.info('蝉道登录已过期，请重新登录')
+          return Promise.reject({ msg: 'invalid session', res })
+        }
+      }
+      return res
+    })
   }
 
   async checkRequestUrl () {
@@ -105,37 +118,28 @@ class ZenTao {
   async getTaskInfo (taskId) {
     try {
       const res = await axios.get(`${this.requestUrl}task-view-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`)
-      if (typeof res.data === 'string') {
-        if (res.data.includes('/user-login')) {
-          log.info('蝉道登录已过期，请重新登录')
-          await this.preLogin()
-          return await this.getTaskInfo(taskId)
-        }
-      }
       if (res.data && res.data.data) {
         log.verbose('data', JSON.parse(res.data.data))
         return JSON.parse(res.data.data)
       }
     } catch (err) {
+      if (err.msg && err.msg === 'invalid session') {
+        await this.preLogin()
+        return await this.getTaskInfo(taskId)
+      }
       log.error('获取失败任务信息', err)
     }
   }
 
   async getMyTaskList () {
     try {
-      const res = await axios.get(`${this.requestUrl}my-task.json?zentaosid=${this.sid}`)
-      if (typeof res.data === 'string') {
-        if (res.data.includes('/user-login')) {
-          log.info('蝉道登录已过期，请重新登录')
-          await this.preLogin()
-          const list = await this.getMyTaskList()
-          log.verbose('MyTaskList', list.data)
-          return list
-        }
-      } else {
-        return JSON.parse(res.data.data).tasks
-      }
+      const res = await this.request.get(`my-task.json?zentaosid=${this.sid}`)
+      return JSON.parse(res.data.data).tasks
     } catch (err) {
+      if (err.msg && err.msg === 'invalid session') {
+        await this.preLogin()
+        return await this.getMyTaskList()
+      }
       log.info('出错了！')
       log.verbose(err)
     }
@@ -170,21 +174,28 @@ class ZenTao {
     }
     data.append('comment', _comment)
     log.verbose(action)
-    const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
-    if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
-      log.success(`开始任务成功！${taskName}`)
-    } else {
-      try {
-        const data = JSON.parse(res.data.data)
-        if (data.bugIds && data.bugIds.length) {
-          log.error(`开始任务失败！`)
-          log.error(`当前有未解决的bug：${data.bugIds.map(id => `B#${id}`).join(',')}`)
-          data.bugIds.forEach(id => {
-            log.info(terminalLink(`B#${id}`, `${this.requestUrl}bug-view-${id}.html`))
-          })
+    try {
+      const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
+      if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
+        log.success(`开始任务成功！${taskName}`)
+      } else {
+        try {
+          const data = JSON.parse(res.data.data)
+          if (data.bugIds && data.bugIds.length) {
+            log.error(`开始任务失败！`)
+            log.error(`当前有未解决的bug：${data.bugIds.map(id => `B#${id}`).join(',')}`)
+            data.bugIds.forEach(id => {
+              log.info(terminalLink(`B#${id}`, `${this.requestUrl}bug-view-${id}.html`))
+            })
+          }
+        } catch (err) {
+          log.error('开始任务失败！请在蝉道手动开始任务！')
         }
-      } catch (err) {
-        log.error('开始任务失败！请在蝉道手动开始任务！')
+      }
+    } catch (err) {
+      if (err.msg && err.msg === 'invalid session') {
+        await this.preLogin()
+        return await this.startTask(taskId, { time, comment, action })
       }
     }
   }
