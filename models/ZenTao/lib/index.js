@@ -117,7 +117,8 @@ class ZenTao {
 
   async getTaskInfo (taskId) {
     try {
-      const res = await axios.get(`${this.requestUrl}task-view-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`)
+      const res = await this.request.get(`${this.requestUrl}task-view-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`)
+      log.verbose('res', res)
       if (res.data && res.data.data) {
         log.verbose('data', JSON.parse(res.data.data))
         return JSON.parse(res.data.data)
@@ -161,7 +162,7 @@ class ZenTao {
 
   async getBugInfo (bugId) {
     try {
-      const res = await axios.get(`${this.requestUrl}bug-view-${bugId}.json?zentaosid=${this.sid}&onlybody=yes`)
+      const res = await this.request.get(`${this.requestUrl}bug-view-${bugId}.json?zentaosid=${this.sid}&onlybody=yes`)
       if (res.data && res.data.data) {
         log.verbose('data', JSON.parse(res.data.data))
         return JSON.parse(res.data.data)
@@ -205,7 +206,7 @@ class ZenTao {
     data.append('comment', _comment)
     log.verbose(action)
     try {
-      const res = await axios.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
+      const res = await this.request.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
       if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
         log.success(`开始任务成功！${taskName}`)
       } else {
@@ -243,7 +244,7 @@ class ZenTao {
     }
     const data = new FormData()
     data.append('comment', _comment)
-    const res = await axios.post(`${this.requestUrl}task-pause-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
+    const res = await this.request.post(`${this.requestUrl}task-pause-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
     if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
       log.success(`暂停任务成功！`)
     } else {

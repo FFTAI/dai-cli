@@ -92,6 +92,7 @@ async function getTaskTitle (name) {
   log.verbose('name', name)
   try {
     const task = await zentao.getTaskInfo(ZenTao.getIdByName(name))
+    log.verbose('task', task)
     if (task.title) {
       return task.title
     } else {
