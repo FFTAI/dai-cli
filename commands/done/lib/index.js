@@ -36,7 +36,7 @@ async function prepare ({ yes, base }) {
   // 1. 校验是否以T#或者B#开头
   ZenTao.checkName(name)
   // 1.1 获取任务标题
-  const title = await getTaskTitle(name)
+  const title = await getCurrentTitle(name)
   log.verbose('title', title)
   // 2. 检查当前分支是否可以切出去
   // 3. commit代码等
@@ -68,7 +68,7 @@ async function prepare ({ yes, base }) {
   log.success('创建合并请求成功！')
 }
 
-async function getTaskTitle (name) {
+async function getCurrentTitle (name) {
   async function getInputTitle () {
     const { title } = await inquirer.prompt({
       type: 'input',
@@ -91,10 +91,18 @@ async function getTaskTitle (name) {
   await zentao.init()
   log.verbose('name', name)
   try {
-    const task = await zentao.getTaskInfo(ZenTao.getIdByName(name))
-    log.verbose('task', task)
-    if (task.title) {
-      return task.title
+    let action
+    if (name.startsWith('T#')) {
+      action = zentao.getTaskInfo.bind(zentao)
+    } else if (name.startsWith('B#')) {
+      action = zentao.getBugInfo.bind(zentao)
+    } else {
+      throw new Error('未知的任务类型')
+    }
+    const data = await action(ZenTao.getIdByName(name))
+    log.verbose('task', data)
+    if (data.title) {
+      return data.title
     } else {
       return await getInputTitle()
     }
@@ -102,5 +110,7 @@ async function getTaskTitle (name) {
     return await getInputTitle()
   }
 }
+
+
 
 module.exports = initDoneCommand()
