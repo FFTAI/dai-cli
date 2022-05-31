@@ -26,7 +26,7 @@ const { statusMap, priorityMap } = ZenTao
 async function startAction (name, { yes, base, time, comment, skipGitControl }) {
   const zentao = new ZenTao()
   await zentao.init()
-  // BUG 只能通过直接输入bug号的方式开始
+  // 通过指定名称开始任务
   if (name) {
     if (name.startsWith('T#')) {
       if (!skipGitControl) {
@@ -40,37 +40,57 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
         await zentao.startTask(ZenTao.getIdByName(name), { time, comment, action })
       }
     } else if (name.startsWith('B#')) {
-      const data = await zentao.getBugInfo(ZenTao.getIdByName(name))
-      if (data && data.title) {
-        const { confirm } = await inquirer.prompt({
-          name: 'confirm',
-          type: 'confirm',
-          message: `开始修复 ${colors.cyan(data.title)}，是否打开 BUG 详情？`,
-          default: true,
-        })
-        if (confirm) {
-          open(`http://112.64.126.27:81/zentao/bug-view-${ZenTao.getIdByName(name)}.html`)
-        }
-
-        if (!skipGitControl) {
-          await checkoutDevBranch(name, { yes, base })
-        }
-      } else {
-        log.info('没有在蝉道上查询到该bug，请确认是否是正确的bug号')
-      }
+      startBug(zentao, name, { skipGitControl, yes, base })
+      return
     }
   } else {
+    // 直接开始任务
+    const bugs = await zentao.getMyBugList()
+    // 如果有bug先修bug
+    if (bugs && bugs.length) {
+      log.info('发现有未解决的bug，请先修复bug！')
+      log.verbose('bugs', bugs)
+      const bug = await chooseStartTask(bugs, 'bug', '选择想要修复的bug')
+      log.verbose('choosedBug', bug)
+      startBug(zentao, `B#${bug.id}`, { skipGitControl, yes, base })
+      return
+    }
     const tasks = await zentao.getMyTaskList()
     const taskList = Object.keys(tasks)
     if (taskList && taskList.length) {
       log.verbose('tasks', tasks)
-      const task = await chooseStartTask(tasks)
+      const tasksList = Object.keys(tasks).map(key => tasks[key])
+      const waitTasksList = tasksList.filter(task => task.status === 'wait')
+      const pauseTasksList = tasksList.filter(task => task.status === 'pause')
+      let choices = [...waitTasksList, ...pauseTasksList]
+      const task = await chooseStartTask(choices)
       const action = task.status === 'pause' ? 'restart' : 'start'
       if (!skipGitControl) {
         await checkoutDevBranch(`T#${task.id}`, { yes, base })
       }
       await zentao.startTask(task.id, { time, comment, action })
     }
+  }
+}
+
+async function startBug (zentao, name, { skipGitControl, yes, base }) {
+  const data = await zentao.getBugInfo(ZenTao.getIdByName(name))
+  log.verbose('bugInfo', data)
+  if (data && data.title) {
+    const { confirm } = await inquirer.prompt({
+      name: 'confirm',
+      type: 'confirm',
+      message: `开始修复 ${colors.cyan(data.title)}，是否在蝉道查看${colors.green('详细信息')}？`,
+      default: true,
+    })
+    if (confirm) {
+      open(`${getConfig(ZENTAO_REQUEST_URL)}bug-view-${ZenTao.getIdByName(name)}.html`)
+    }
+    if (!skipGitControl) {
+      await checkoutDevBranch(name, { yes, base })
+    }
+  } else {
+    log.info('没有在蝉道上查询到该bug，请确认是否是正确的bug号')
   }
 }
 
@@ -84,18 +104,15 @@ async function checkoutDevBranch (name, { yes, base }) {
   await git.checkoutTaskBranch(name, base)
 }
 
-async function chooseStartTask (tasks) {
-  const tasksList = Object.keys(tasks).map(key => tasks[key])
-  const waitTasksList = tasksList.filter(task => task.status === 'wait')
-  const pauseTasksList = tasksList.filter(task => task.status === 'pause')
-  let choices = [...waitTasksList, ...pauseTasksList]
+async function chooseStartTask (choices, type, message = '选择一个想要开始的任务') {
   if (!choices || !choices.length) {
     throw new Error('当前没有任务可以开始')
   }
   choices.sort((a, b) => a.pri - b.pri)
-  choices = choices.map(task => {
-    const name = `${priorityMap[task.pri]} ${colors.bold(`T#${task.id}`)} ${statusMap[task.status]} ${task.name}`
-    const link = `${getConfig(ZENTAO_REQUEST_URL)}task-view-${task.id}.html`
+  const _choices = choices.map(task => {
+    const prefix = type === 'task' ? 'T#' : 'B#'
+    const name = `${priorityMap[task.pri]} ${colors.bold(`${prefix}${task.id}`)} ${statusMap[task.status]} ${type === 'task' ? task.name : task.title}`
+    const link = `${getConfig(ZENTAO_REQUEST_URL)}${type}-view-${task.id}.html`
     return {
       name: terminalLink(name, link),
       value: task.id,
@@ -105,10 +122,16 @@ async function chooseStartTask (tasks) {
   const { task } = await inquirer.prompt({
     type: 'list',
     name: 'task',
-    message: '选择一个想要开始的任务',
-    choices
+    message,
+    choices: _choices
   })
-  return tasks[task]
+  log.verbose('choices', choices)
+  log.verbose('task', task)
+  return choices.find(item => item.id === task)
 }
+
+// async function chooseStartBug () {
+
+// }
 
 module.exports = initStartCommand()

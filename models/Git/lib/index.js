@@ -14,11 +14,13 @@ class Git {
 
   async prepareBranch (yes, options) {
     log.verbose('prepareBranch~')
+    log.info(checkoutMessage('------正在准备分支------'))
     // 1. 确保当前分支是否可以切出去
     // 1.1 确认stash区是否要pop
     await this.checkStash(yes)
     // 1.2 检查所有文件是否提交
     await this.checkChanges(yes, options)
+    log.info(checkoutMessage('------准备分支完成------'))
   }
 
   async checkoutTaskBranch (task, baseBranch) {

@@ -12,7 +12,7 @@ const terminalLink = require('terminal-link')
 const startsWith = ['T#', 'B#']
 
 function checkName (name) {
-  if (!startsWith.includes(name.substr(0, 2))) {
+  if (!name || !startsWith.includes(name.substr(0, 2))) {
     throw new Error('<name> 必须以T#或者B#开头')
   }
 }
@@ -271,7 +271,8 @@ class ZenTao {
   static statusMap = {
     'pause': colors.brightYellow('暂停中'),
     'wait': colors.brightGreen('未开始'),
-    'doing': colors.blue('进行中')
+    'doing': colors.blue('进行中'),
+    'active': colors.brightGreen('已激活'),
   }
 
   static priorityMap = {
