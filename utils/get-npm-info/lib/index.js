@@ -25,10 +25,14 @@ function getDefaultRegisty (isOrigin = true) {
 }
 
 async function getNpmVersions (npmName, registry) {
-  const data = await getNpmInfo(npmName, registry)
-  if (data) {
-    return Object.keys(data.versions)
-  } else {
+  try {
+    const data = await getNpmInfo(npmName, registry)
+    if (data) {
+      return Object.keys(data.versions)
+    } else {
+      return []
+    }
+  } catch {
     return []
   }
 }
