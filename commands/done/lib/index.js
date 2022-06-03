@@ -79,7 +79,7 @@ async function getCurrentTitle (name) {
         const done = this.async()
         setTimeout(function () {
           if (!input) {
-            done(`手动输入Title`)
+            done(`手动输入Title.`)
           }
           done(null, true)
         }, 0)
