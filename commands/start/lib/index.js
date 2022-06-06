@@ -53,22 +53,27 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
       const bug = await chooseStartTask(bugs, 'bug', '选择想要修复的bug')
       log.verbose('choosedBug', bug)
       startBug(zentao, `B#${bug.id}`, { skipGitControl, yes, base })
-      return
-    }
-    const tasks = await zentao.getMyTaskList()
-    const taskList = Object.keys(tasks)
-    if (taskList && taskList.length) {
-      log.verbose('tasks', tasks)
-      const tasksList = Object.keys(tasks).map(key => tasks[key])
-      const waitTasksList = tasksList.filter(task => task.status === 'wait')
-      const pauseTasksList = tasksList.filter(task => task.status === 'pause')
-      let choices = [...waitTasksList, ...pauseTasksList]
-      const task = await chooseStartTask(choices)
-      const action = task.status === 'pause' ? 'restart' : 'start'
-      if (!skipGitControl) {
-        await checkoutDevBranch(`T#${task.id}`, { yes, base })
+    } else {
+      // 如果没bug，开始任务
+      const tasks = await zentao.getMyTaskList()
+      const taskList = Object.keys(tasks)
+      if (taskList && taskList.length) {
+        log.verbose('tasks', tasks)
+        const tasksList = Object.keys(tasks).map(key => tasks[key])
+        const waitTasksList = tasksList.filter(task => task.status === 'wait')
+        const pauseTasksList = tasksList.filter(task => task.status === 'pause')
+        let choices = [...waitTasksList, ...pauseTasksList]
+        const task = await chooseStartTask(choices, 'task')
+        if (task) {
+          const action = task.status === 'pause' ? 'restart' : 'start'
+          if (!skipGitControl) {
+            await checkoutDevBranch(`T#${task.id}`, { yes, base })
+          }
+          await zentao.startTask(task.id, { time, comment, action })
+        }
+      } else {
+        log.info('没有任务可以开始')
       }
-      await zentao.startTask(task.id, { time, comment, action })
     }
   }
 }
@@ -106,7 +111,8 @@ async function checkoutDevBranch (name, { yes, base }) {
 
 async function chooseStartTask (choices, type, message = '选择一个想要开始的任务') {
   if (!choices || !choices.length) {
-    throw new Error('当前没有任务可以开始')
+    log.info('当前没有任务可以开始')
+    return
   }
   choices.sort((a, b) => a.pri - b.pri)
   const _choices = choices.map(task => {
