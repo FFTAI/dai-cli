@@ -10,6 +10,7 @@ const commander = require('commander')
 const log = require('@fftai/dai-cli-log')
 const program = new commander.Command()
 const start = require('@fftai/dai-cli-command-start')
+const list = require('@fftai/dai-cli-command-list')
 const done = require('@fftai/dai-cli-command-done')
 const pause = require('@fftai/dai-cli-command-pause')
 const login = require('@fftai/dai-cli-command-login')
@@ -132,6 +133,7 @@ function registerCommand () {
 
   program
     .addCommand(start)
+    .addCommand(list)
     .addCommand(pause)
     .addCommand(login)
     .addCommand(config)
@@ -147,6 +149,8 @@ function registerCommand () {
   // 先解析命令
   program.parse(process.argv)
 
+  log.verbose('process.argv', process.argv)
+
   // 发现 args 为空 则弹出提示
   if (program.args && program.args.length < 1) {
     program.outputHelp()
@@ -155,5 +159,7 @@ function registerCommand () {
 
 // 错误处理
 process.on('uncaughtException', (err) => {
-  log.error(err.message)
+  log.verbose(err.message)
 })
+
+process.setMaxListeners(0)
