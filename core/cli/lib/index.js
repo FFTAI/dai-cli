@@ -162,7 +162,7 @@ function registerCommand () {
 
 // 错误处理
 process.on('uncaughtException', (err) => {
-  log.verbose(err.message)
+  log.error(err.message)
 })
 
 process.setMaxListeners(0)
