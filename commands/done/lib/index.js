@@ -54,18 +54,28 @@ async function prepare ({ yes, base }) {
   log.verbose('repo', repo)
   try {
     log.info('正在创建合并请求，需要花一些时间，请稍候...')
-    await gitea.createPullRequest({
+    const { html_url } = await gitea.createPullRequest({
       repo,
       baseBranch,
       title,
       currentBranch: name
     })
+    log.success('创建合并请求成功！')
+    log.info('地址', colors.underline(colors.green(html_url)))
+    log.info('review 地址', colors.underline(colors.green(html_url + '/files')))
   } catch (err) {
-    log.error(err)
-    log.error('创建合并请求失败，请手动创建')
+    if (err.response.status === 409) {
+      log.warn(colors.cyan('这条分支已经提交过 pull request 了'))
+      const id = err.response.data.message.match(/(?<=issue_id: )\d+/)
+      const pull_request_url = err.response.data.url.replace('api/swagger', '') + repo + '/pulls/' + id
+      log.info('地址', colors.underline(colors.green(`${pull_request_url}`)))
+      log.info('review 地址', colors.underline(colors.green(pull_request_url + '/files')))
+    } else {
+      log.error('error!', err)
+      log.error('创建合并请求失败，请手动创建')
+    }
     return
   }
-  log.success('创建合并请求成功！')
 }
 
 async function getCurrentTitle (name) {
