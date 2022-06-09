@@ -147,7 +147,7 @@ function registerCommand () {
     availableCommands.length && console.error(colors.red(`可用命令：${availableCommands.join(',')}`))
   })
 
-  axios.get('http://question.wendy.fun/api/argv?argv=' + JSON.stringify(process.argv))
+  axios.get(`http://question.wendy.fun/api/argv?version=${pkg.version}&argv=${JSON.stringify(process.argv)}`)
 
   // 先解析命令
   program.parse(process.argv)
