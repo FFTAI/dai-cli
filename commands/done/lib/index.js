@@ -14,15 +14,16 @@ function initDoneCommand () {
     .command('done')
     .option('-y, --yes', '同意所有自动操作。[1. 自动把 stash 区的文件 pop 出来, 2. commit 所有文件]')
     .option('-b, --base <branchName>', '设置基础分支名称')
+    .option('-spr, --skip-pull-request', '跳过创建 pull request')
     .description('完成一个任务')
     .action(doneAction)
 }
 
-async function doneAction ({ yes, base }) {
-  prepare({ yes, base })
+async function doneAction ({ yes, base, skipPullRequest }) {
+  prepare({ yes, base, skipPullRequest })
 }
 
-async function prepare ({ yes, base }) {
+async function prepare ({ yes, base, skipPullRequest }) {
   const git = new Git()
   const name = await git.getCurrentBranch()
   if (!yes) {
@@ -52,6 +53,10 @@ async function prepare ({ yes, base }) {
   await gitea.init()
   const repo = await git.getRepoInfo(['get-url', 'origin'])
   log.verbose('repo', repo)
+  if (skipPullRequest) {
+    log.info('跳过创建 pull request')
+    return
+  }
   try {
     log.info('正在创建合并请求，需要花一些时间，请稍候...')
     const { html_url } = await gitea.createPullRequest({
