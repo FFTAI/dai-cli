@@ -18,6 +18,8 @@ jobs:
                   ssh-keyscan "gitee.com" >> ~/.ssh/known_hosts
             - name: sync to gitee # 同步
               run: |
+                  git remote add old git@github.com:FFTAI/dai-cli.git
+                  git fetch --unshallow old
                   git remote add gitee git@gitee.com:flyrj/dai.git
                   git push -f gitee main:master
             - name: delete ssh key # 删除 ssh key
