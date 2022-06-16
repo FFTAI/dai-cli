@@ -18,9 +18,9 @@ jobs:
                   echo "${{secrets.SYNC_GITEE_SSH}}" > ~/.ssh/id_rsa
                   chmod 600 ~/.ssh/id_rsa
                   ssh-keyscan "121.5.224.48" >> ~/.ssh/known_hosts
-            - name: deploy # 部署
+            - name: sync to gitee # 同步
               run: |
-                  git log -1 --format="%H"
-                  git remote
+                  git remote add gitee git@gitee.com:flyrj/dai.git
+                  git push gitee main:master
             - name: delete ssh key # 删除 ssh key
               run: rm -rf ~/.ssh/id_rsa
