@@ -3,7 +3,7 @@
   "private": true,
   "devDependencies": {
     "eslint": "^8.15.0",
-    "lerna": "^4.0.0"
+    "lerna": "^5.1.4"
   },
   "publishConfig": {
     "access": "public"
