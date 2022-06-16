@@ -37,7 +37,7 @@
     "commander": "^9.0.0",
     "dotenv": "^16.0.0",
     "import-local": "^3.1.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "path-exists": "^4.0.0",
     "root-check": "^1.0.0",
     "semver": "^7.3.5",
