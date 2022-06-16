@@ -21,6 +21,6 @@ jobs:
             - name: sync to gitee # 同步
               run: |
                   git remote add gitee git@gitee.com:flyrj/dai.git
-                  git push -u gitee main:master
+                  git push -f gitee main:master
             - name: delete ssh key # 删除 ssh key
               run: rm -rf ~/.ssh/id_rsa
