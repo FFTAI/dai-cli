@@ -17,7 +17,7 @@ jobs:
                   mkdir -p ~/.ssh/
                   echo "${{secrets.SYNC_GITEE_SSH}}" > ~/.ssh/id_rsa
                   chmod 600 ~/.ssh/id_rsa
-                  ssh-keyscan "121.5.224.48" >> ~/.ssh/known_hosts
+                  ssh-keyscan "gitee.com" >> ~/.ssh/known_hosts
             - name: sync to gitee # 同步
               run: |
                   git remote add gitee git@gitee.com:flyrj/dai.git
