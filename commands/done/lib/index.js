@@ -29,7 +29,7 @@ async function prepare ({ yes, base, skipPullRequest }) {
   if (!yes) {
     const { confirm } = await inquirer.prompt({
       type: 'confirm',
-      name: 'task',
+      name: 'confirm',
       message: `确认要提交 ${colors.cyan(name)} 分支的代码吗？`,
     })
     if (!confirm) {
