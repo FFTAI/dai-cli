@@ -1,0 +1,26 @@
+name: sync to gitee
+
+on:
+    push:
+        branches:
+            - 'main' # 只针对 dev 分支
+        paths:
+            - '**'
+
+jobs:
+    sync-to-gitee:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: set ssh key # 临时设置 ssh key
+              run: |
+                  mkdir -p ~/.ssh/
+                  echo "${{secrets.SYNC_GITEE_SSH}}" > ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa
+                  ssh-keyscan "121.5.224.48" >> ~/.ssh/known_hosts
+            - name: deploy # 部署
+              run: |
+                  git log -1 --format="%H"
+                  git remote
+            - name: delete ssh key # 删除 ssh key
+              run: rm -rf ~/.ssh/id_rsa
