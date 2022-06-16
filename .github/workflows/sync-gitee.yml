@@ -3,7 +3,7 @@ name: sync to gitee
 on:
     push:
         branches:
-            - 'main' # 只针对 dev 分支
+            - 'main' # 只针对 main 分支
 
 jobs:
     sync-to-gitee:
@@ -17,6 +17,7 @@ jobs:
                   chmod 600 ~/.ssh/id_rsa
                   ssh-keyscan "gitee.com" >> ~/.ssh/known_hosts
             - name: sync to gitee # 同步
+            # 先同步分支后，强制推送
               run: |
                   git remote add old git@github.com:FFTAI/dai-cli.git
                   git fetch --unshallow old
