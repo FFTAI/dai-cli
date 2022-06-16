@@ -27,11 +27,14 @@ async function prepare ({ yes, base, skipPullRequest }) {
   const git = new Git()
   const name = await git.getCurrentBranch()
   if (!yes) {
-    await inquirer.prompt({
+    const { confirm } = await inquirer.prompt({
       type: 'confirm',
       name: 'task',
       message: `确认要提交 ${colors.cyan(name)} 分支的代码吗？`,
     })
+    if (!confirm) {
+      throw new Error('任务中断')
+    }
   }
   log.verbose(name, 'name')
   // 1. 校验是否以T#或者B#开头
