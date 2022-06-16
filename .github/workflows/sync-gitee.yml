@@ -4,8 +4,6 @@ on:
     push:
         branches:
             - 'main' # 只针对 dev 分支
-        paths:
-            - '**'
 
 jobs:
     sync-to-gitee:
