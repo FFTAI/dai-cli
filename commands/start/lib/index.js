@@ -16,7 +16,7 @@ function initStartCommand () {
     .option('-b, --base <branchName>', '设置基础分支名称')
     .option('-t, --time <hour>', '预估时间')
     .option('-m, --comment <comment>', '任务备注')
-    .option('-sg, --skip-git-control', '只在蝉道开始任务，跳过分支管理')
+    .option('-sg, --skip-git-control', '只在禅道开始任务，跳过分支管理')
     .description('开始一个任务')
     .action(startAction)
 }
@@ -85,7 +85,7 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
     const { confirm } = await inquirer.prompt({
       name: 'confirm',
       type: 'confirm',
-      message: `开始修复 ${colors.cyan(data.title)}，是否在蝉道查看${colors.green('详细信息')}？`,
+      message: `开始修复 ${colors.cyan(data.title)}，是否在禅道查看${colors.green('详细信息')}？`,
       default: true,
     })
     if (confirm) {
@@ -95,7 +95,7 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
       await checkoutDevBranch(name, { yes, base })
     }
   } else {
-    log.info('没有在蝉道上查询到该bug，请确认是否是正确的bug号')
+    log.info('没有在禅道上查询到该bug，请确认是否是正确的bug号')
   }
 }
 

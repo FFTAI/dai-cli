@@ -91,7 +91,7 @@ async function getCurrentTitle (name) {
     const { title } = await inquirer.prompt({
       type: 'input',
       name: 'title',
-      message: '从蝉道获取 title 失败，请手动输入 title',
+      message: '从禅道获取 title 失败，请手动输入 title',
       default: '',
       validate: function (input)  {
         const done = this.async()

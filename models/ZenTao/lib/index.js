@@ -20,17 +20,17 @@ function checkName (name) {
 async function checkRequestUrl () {
   const requestUrl = getConfig(ZENTAO_REQUEST_URL)
   if (!requestUrl) {
-    log.warn(`蝉道 requestUrl 未设置`)
+    log.warn(`禅道 requestUrl 未设置`)
     const { requestUrl } = await inquirer.prompt({
       type: 'input',
       name: 'requestUrl',
-      message: '请输入蝉道地址，格式：http://127.0.0.1:88/zentao/',
+      message: '请输入禅道地址，格式：http://127.0.0.1:88/zentao/',
       default: '',
       validate: function (input)  {
         const done = this.async()
         setTimeout(function () {
           if (!input) {
-            done(`请输入蝉道地址`)
+            done(`请输入禅道地址`)
           }
           done(null, true)
         }, 0)
@@ -60,7 +60,7 @@ class ZenTao {
     this.request.interceptors.response.use(res => {
       if (typeof res.data === 'string') {
         if (res.data.includes('/user-login')) {
-          log.info('蝉道登录已过期，请重新登录')
+          log.info('禅道登录已过期，请重新登录')
           return Promise.reject({ msg: 'invalid session', res })
         }
       }
@@ -92,7 +92,7 @@ class ZenTao {
         const sid = this.getSid(res.headers['set-cookie'])
         setConfig(ZENTAO_SESSION_ID, sid)
         this.sid = sid
-        log.success(`蝉道登录成功！`)
+        log.success(`禅道登录成功！`)
       } else {
         log.error(res.data.reason)
       }
@@ -220,7 +220,7 @@ class ZenTao {
             })
           }
         } catch (err) {
-          log.error('开始任务失败！请在蝉道手动开始任务！')
+          log.error('开始任务失败！请在禅道手动开始任务！')
         }
       }
     } catch (err) {
@@ -251,7 +251,7 @@ class ZenTao {
       try {
         JSON.parse(res.data.data)
       } catch (err) {
-        log.error('暂停任务失败！请在蝉道手动开始任务！')
+        log.error('暂停任务失败！请在禅道手动开始任务！')
         log.info(`${this.requestUrl}task-view-${taskId}.html`)
       }
     }

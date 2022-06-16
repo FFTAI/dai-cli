@@ -18,7 +18,7 @@ const systemPrompt = {
   message: '选择登录的系统',
   default: 'zentao',
   choices: [{
-    name: '蝉道',
+    name: '禅道',
     value: 'zentao'
   }, {
     name: 'gitea',

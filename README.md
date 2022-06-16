@@ -33,9 +33,9 @@
    
 - 基本配置，复制下面的代码，这步很重要
 
-   - 配置蝉道地址
+   - 配置禅道地址
       ```sh
-      dai config set ZENTAO_REQUEST_URL 蝉道地址
+      dai config set ZENTAO_REQUEST_URL 禅道地址
       ```
 
    - 配置gitea地址
@@ -91,14 +91,14 @@
 
 > 如果你开始了一个 bug 将会询问你是否打开详情查看，而任务则不会，如果你只是想看的详情，用 dai list
 
-开始后可以帮助你切换到对应的开发分支，并且在蝉道上也维护相应的状态。
+开始后可以帮助你切换到对应的开发分支，并且在禅道上也维护相应的状态。
 
 具体流程如下：
 
 1. 检测当前分支是否有未提交代码，有未提交则 `git commit`
 2. 更新`基础分支`
 3. 从`基础分支`切出来到`开发分支`
-4. 在蝉道上开始任务
+4. 在禅道上开始任务
 
 ```sh
 dai start [name]
@@ -106,7 +106,7 @@ dai start [name]
 
 #### 例子
 
-暂停任务号为 1234 的任务
+开始任务号为 1234 的任务
 
 ```sh
 dai start T#1234
@@ -119,7 +119,7 @@ dai start T#1234
 -b, --base <branchName>  设置基础分支名称
 -t, --time <hour>        预估时间
 -m, --comment <comment>  任务备注
--sg, --skip-git-control  只在蝉道开始任务，跳过分支管理
+-sg, --skip-git-control  只在禅道开始任务，跳过分支管理
 -h, --help               display help for command
 ```
 
@@ -133,7 +133,7 @@ dai start -b master
 
 ### pause命令
 
-在`蝉道`暂停一个任务, 可直接传入name来指令暂停的任务
+在`禅道`暂停一个任务, 可直接传入name来指令暂停的任务
 
 ```sh
 dai pause [name]
