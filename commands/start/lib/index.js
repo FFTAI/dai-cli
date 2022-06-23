@@ -45,7 +45,7 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
     }
   } else {
     // 直接开始任务
-    const bugs = await zentao.getMyBugList()
+    const bugs = await zentao.getMyBugList('active')
     // 如果有bug先修bug
     if (bugs && bugs.length) {
       log.info('发现有未解决的bug，请先修复bug！')

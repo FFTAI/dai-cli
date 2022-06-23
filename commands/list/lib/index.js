@@ -23,7 +23,7 @@ async function listAction (type) {
   if (!type || type === 'bug') {
     log.info('列出bug...')
     // 查询所有bug
-    const bugs = await zentao.getMyBugList()
+    const bugs = await zentao.getMyBugList('active')
     if (bugs && bugs.length) {
       log.verbose('bugs', bugs)
       const bug = await chooseListTask(bugs, 'bug', '选择想要修复的bug')

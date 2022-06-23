@@ -146,10 +146,16 @@ class ZenTao {
     }
   }
 
-  async getMyBugList () {
+  async getMyBugList (type) {
     try {
       const res = await this.request.get(`my-bug.json?zentaosid=${this.sid}`)
-      return JSON.parse(res.data.data).bugs
+      const bugs = JSON.parse(res.data.data).bugs
+      log.verbose('bugs', bugs)
+      if (type === 'active') {
+        return bugs.filter(bug => bug.status === 'active')
+      } else {
+        return bugs
+      }
     } catch (err) {
       if (err.msg && err.msg === 'invalid session') {
         await this.preLogin()
