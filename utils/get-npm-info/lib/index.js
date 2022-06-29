@@ -20,7 +20,7 @@ function getNpmInfo (npmName, registry) {
   })
 }
 
-function getDefaultRegisty (isOrigin = true) {
+function getDefaultRegisty (isOrigin = false) {
   return isOrigin ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org'
 }
 
