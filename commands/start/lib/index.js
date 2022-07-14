@@ -67,6 +67,10 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
         const waitTasksList = tasksList.filter(task => task.status === 'wait')
         const pauseTasksList = tasksList.filter(task => task.status === 'pause')
         let choices = [...waitTasksList, ...pauseTasksList]
+        if (!choices || !choices.length) {
+          log.info('没有任务可以开始')
+          return
+        }
         const task = await chooseStartTask(choices, 'task')
         if (task) {
           const action = task.status === 'pause' ? 'restart' : 'start'
