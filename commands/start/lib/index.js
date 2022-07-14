@@ -56,6 +56,9 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
     } else {
       // 如果没bug，开始任务
       const tasks = await zentao.getMyTaskList()
+      if (!tasks) {
+        log.info('没有任务可以开始')
+      }
       const taskList = Object.keys(tasks)
       if (taskList && taskList.length) {
         log.verbose('tasks', tasks)
