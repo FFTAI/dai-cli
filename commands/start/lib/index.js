@@ -66,7 +66,7 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
         const tasksList = Object.keys(tasks).map(key => tasks[key])
         const waitTasksList = tasksList.filter(task => task.status === 'wait')
         const pauseTasksList = tasksList.filter(task => task.status === 'pause')
-        let choices = [...waitTasksList, ...pauseTasksList]
+        let choices = [...waitTasksList, ...pauseTasksList].filter(v => v)
         if (!choices || !choices.length) {
           log.info('没有任务可以开始')
           return
