@@ -1,6 +1,6 @@
 {
   "name": "@fftai/dai-cli",
-  "version": "0.5.4",
+  "version": "0.6.0-alpha.0",
   "description": "dai-cli 核心库",
   "author": "daiyan.Shen <daishan526@gmail.com>",
   "homepage": "",
