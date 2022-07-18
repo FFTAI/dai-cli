@@ -93,12 +93,13 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
   if (data && data.title) {
     // 开始 bug 逻辑
     // 如果没有确认bug，则询问是否在茶道查看详情
-    if (data.confirmed === '0') {
+    if (data.bug.confirmed === '0') {
+      log.info('Bug尚未确认，请确认后再修复')
       // 是否在蝉道查看bug详情
       const { check } = await inquirer.prompt({
         name: 'check',
         type: 'confirm',
-        message: `开始修复 ${colors.cyan(data.title)}，是否在禅道查看${colors.green('详细信息')}？`,
+        message: `开始修复 ${colors.cyan(data.title)}，是否在禅道确认${colors.green('详细信息')}？`,
         default: true,
       })
       if (check) {
@@ -108,7 +109,7 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
         const { confirmBug } = await inquirer.prompt({
           name: 'confirmBug',
           type: 'confirm',
-          message: `是否直接确认Bug [${bugId}]${colors.cyan(data.title)}，并开始修复？`,
+          message: `是否直接确认Bug ${colors.cyan(data.title)}，并开始修复？`,
           default: true,
         })
         if (confirmBug) {
@@ -120,11 +121,13 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
           })
           await zentao.confirmBug(bugId, commit)
         } else {
+          log.warn('请在确认后再开始修复Bug')
           return
         }
       }
     }
     // 如果bug的状态是已确认，就直接开始bug
+    log.success('Bug已确认，正在开始修复')
     if (!skipGitControl) {
       await checkoutDevBranch(name, { yes, base })
     }
