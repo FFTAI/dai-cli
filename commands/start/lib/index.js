@@ -87,18 +87,44 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
 }
 
 async function startBug (zentao, name, { skipGitControl, yes, base }) {
-  const data = await zentao.getBugInfo(ZenTao.getIdByName(name))
+  const bugId = ZenTao.getIdByName(name)
+  const data = await zentao.getBugInfo(bugId)
   log.verbose('bugInfo', data)
   if (data && data.title) {
-    const { confirm } = await inquirer.prompt({
-      name: 'confirm',
-      type: 'confirm',
-      message: `开始修复 ${colors.cyan(data.title)}，是否在禅道查看${colors.green('详细信息')}？`,
-      default: true,
-    })
-    if (confirm) {
-      open(`${getConfig(ZENTAO_REQUEST_URL)}bug-view-${ZenTao.getIdByName(name)}.html`)
+    // 开始 bug 逻辑
+    // 如果没有确认bug，则询问是否在茶道查看详情
+    if (data.confirmed === '0') {
+      // 是否在蝉道查看bug详情
+      const { check } = await inquirer.prompt({
+        name: 'check',
+        type: 'confirm',
+        message: `开始修复 ${colors.cyan(data.title)}，是否在禅道查看${colors.green('详细信息')}？`,
+        default: true,
+      })
+      if (check) {
+        open(`${getConfig(ZENTAO_REQUEST_URL)}bug-view-${bugId}.html`)
+      } else {
+        // 如果选择不查看详情，询问是否直接确认bug
+        const { confirmBug } = await inquirer.prompt({
+          name: 'confirmBug',
+          type: 'confirm',
+          message: `是否直接确认Bug [${bugId}]${colors.cyan(data.title)}，并开始修复？`,
+          default: true,
+        })
+        if (confirmBug) {
+          const commit = await inquirer.prompt({
+            type: 'input',
+            name: 'commit',
+            message: '备注',
+            default: '',
+          })
+          await zentao.confirmBug(bugId, commit)
+        } else {
+          return
+        }
+      }
     }
+    // 如果bug的状态是已确认，就直接开始bug
     if (!skipGitControl) {
       await checkoutDevBranch(name, { yes, base })
     }

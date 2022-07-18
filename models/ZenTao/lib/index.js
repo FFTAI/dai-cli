@@ -166,6 +166,25 @@ class ZenTao {
     }
   }
 
+  async confirmBug (bugId, commit) {
+    try {
+      const res = await this.request.get(`bug-confirmBug-${bugId}.json?zentaosid=${this.sid}&commit=${commit || ''}`)
+      log.verbose('res', res)
+      if (res.data.status === 'success') {
+        log.success('确认成功')
+      } else {
+        log.error(res.data.reason)
+      }
+    } catch (err) {
+      if (err.msg && err.msg === 'invalid session') {
+        await this.preLogin()
+        return await this.confirmBug(bugId)
+      }
+      log.info('出错了！')
+      log.verbose(err)
+    }
+  }
+
   async getBugInfo (bugId) {
     try {
       const res = await this.request.get(`${this.requestUrl}bug-view-${bugId}.json?zentaosid=${this.sid}&onlybody=yes`)
