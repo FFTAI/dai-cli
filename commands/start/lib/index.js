@@ -94,7 +94,7 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
     // 开始 bug 逻辑
     // 如果没有确认bug，则询问是否在茶道查看详情
     if (data.bug.confirmed === '0') {
-      log.info('Bug尚未确认，请确认后再修复')
+      log.info(`${colors.cyan(data.title)} 尚未确认，请确认后再修复`)
       // 是否在蝉道查看bug详情
       const { check } = await inquirer.prompt({
         name: 'check',
@@ -109,17 +109,21 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
         const { confirmBug } = await inquirer.prompt({
           name: 'confirmBug',
           type: 'confirm',
-          message: `是否直接确认Bug ${colors.cyan(data.title)}，并开始修复？`,
+          message: `是否确认Bug ${colors.cyan(data.title)}，并开始修复？`,
           default: true,
         })
         if (confirmBug) {
-          const commit = await inquirer.prompt({
+          const { comment } = await inquirer.prompt({
             type: 'input',
-            name: 'commit',
+            name: 'comment',
             message: '备注',
             default: '',
           })
-          await zentao.confirmBug(bugId, commit)
+          try {
+            await zentao.confirmBug(bugId, comment)
+          } catch (err) {
+            return
+          }
         } else {
           log.warn('请在确认后再开始修复Bug')
           return

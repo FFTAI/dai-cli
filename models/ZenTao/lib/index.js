@@ -166,14 +166,20 @@ class ZenTao {
     }
   }
 
-  async confirmBug (bugId, commit) {
+  async confirmBug (bugId, comment) {
     try {
-      const res = await this.request.get(`bug-confirmBug-${bugId}.json?zentaosid=${this.sid}&commit=${commit || ''}`)
+      const data = new FormData()
+      if (comment) {
+        data.append('comment', comment)
+      }
+      const res = await this.request.post(
+        `${this.requestUrl}bug-confirmBug-${bugId}.json?zentaosid=${this.sid}&onlybody=yes`,
+        data,
+        { headers: data.getHeaders() }
+      )
       log.verbose('res', res)
-      if (res.data.status === 'success') {
+      if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
         log.success('确认成功')
-      } else {
-        log.error(res.data.reason)
       }
     } catch (err) {
       if (err.msg && err.msg === 'invalid session') {
@@ -231,7 +237,11 @@ class ZenTao {
     data.append('comment', _comment)
     log.verbose(action)
     try {
-      const res = await this.request.post(`${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
+      const res = await this.request.post(
+        `${this.requestUrl}task-${action}-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`,
+        data,
+        { headers: data.getHeaders() }
+      )
       if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
         log.success(`开始任务成功！${taskName}`)
       } else {
@@ -269,7 +279,11 @@ class ZenTao {
     }
     const data = new FormData()
     data.append('comment', _comment)
-    const res = await this.request.post(`${this.requestUrl}task-pause-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`, data,  { headers: data.getHeaders() })
+    const res = await this.request.post(
+      `${this.requestUrl}task-pause-${taskId}.json?zentaosid=${this.sid}&onlybody=yes`,
+      data,
+      { headers: data.getHeaders() }
+    )
     if (typeof res.data === 'string' && res.data.includes(`parent.parent.$.cookie('selfClose', 1)`)) {
       log.success(`暂停任务成功！`)
     } else {
