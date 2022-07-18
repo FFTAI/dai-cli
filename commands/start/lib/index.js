@@ -86,6 +86,32 @@ async function startAction (name, { yes, base, time, comment, skipGitControl }) 
   }
 }
 
+async function confirmBug (zentao, bugId, bugInfo) {
+  const { confirmBug } = await inquirer.prompt({
+    name: 'confirmBug',
+    type: 'confirm',
+    message: `是否确认Bug ${colors.cyan(bugInfo.title)}，并开始修复？`,
+    default: true,
+  })
+  if (confirmBug) {
+    const { comment } = await inquirer.prompt({
+      type: 'input',
+      name: 'comment',
+      message: '备注',
+      default: '',
+    })
+    try {
+      await zentao.confirmBug(bugId, comment)
+      return true
+    } catch (err) {
+      return false
+    }
+  } else {
+    log.warn('请在确认后再开始修复Bug')
+    return false
+  }
+}
+
 async function startBug (zentao, name, { skipGitControl, yes, base }) {
   const bugId = ZenTao.getIdByName(name)
   const data = await zentao.getBugInfo(bugId)
@@ -96,42 +122,34 @@ async function startBug (zentao, name, { skipGitControl, yes, base }) {
     if (data.bug.confirmed === '0') {
       log.info(`${colors.cyan(data.title)} 尚未确认，请确认后再修复`)
       // 是否在蝉道查看bug详情
-      const { check } = await inquirer.prompt({
-        name: 'check',
+      const { useManualCheck } = await inquirer.prompt({
+        name: 'useManualCheck',
         type: 'confirm',
-        message: `开始修复 ${colors.cyan(data.title)}，是否在禅道确认${colors.green('详细信息')}？`,
+        message: `开始修复 ${colors.cyan(data.title)}，是否在禅道确认${colors.green('详细信息')} ？`,
         default: true,
       })
-      if (check) {
+      let isManualCheck = false
+      if (useManualCheck) {
         open(`${getConfig(ZENTAO_REQUEST_URL)}bug-view-${bugId}.html`)
-      } else {
-        // 如果选择不查看详情，询问是否直接确认bug
-        const { confirmBug } = await inquirer.prompt({
-          name: 'confirmBug',
+        // 查看详情后确认是否在蝉道中确认 BUG
+        const result = await inquirer.prompt({
+          name: 'isManualCheck',
           type: 'confirm',
-          message: `是否确认Bug ${colors.cyan(data.title)}，并开始修复？`,
+          message: `是否已在蝉道中确认Bug ${colors.cyan(data.title)} ？`,
           default: true,
         })
-        if (confirmBug) {
-          const { comment } = await inquirer.prompt({
-            type: 'input',
-            name: 'comment',
-            message: '备注',
-            default: '',
-          })
-          try {
-            await zentao.confirmBug(bugId, comment)
-          } catch (err) {
-            return
-          }
-        } else {
-          log.warn('请在确认后再开始修复Bug')
+        isManualCheck = result.isManualCheck
+      }
+      // 查看详情
+      if (!useManualCheck || !isManualCheck) {
+        const isConfirm = await confirmBug(zentao, bugId, data)
+        if (!isConfirm) {
           return
         }
       }
     }
     // 如果bug的状态是已确认，就直接开始bug
-    log.success('Bug已确认，正在开始修复')
+    log.success('Bug 已确认，正在开始修复')
     if (!skipGitControl) {
       await checkoutDevBranch(name, { yes, base })
     }
